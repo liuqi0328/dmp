@@ -1,6 +1,6 @@
 // load the things we need
 const mongoose = require('mongoose');
-const application = require('./application');
+const Application = require('./application');
 
 // define the schema for our voice application model
 let voiceAppSchema = new mongoose.Schema({
@@ -29,7 +29,7 @@ let voiceAppSchema = new mongoose.Schema({
 voiceAppSchema.post('save', async (doc) => {
     console.log('%s has been saved', doc._id);
     let appId = doc._id;
-    let application = await application.create({app_id: appId});
+    let application = await Application.create({app_id: appId});
     console.log('application created', application);
 });
 
