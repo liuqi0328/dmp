@@ -3,21 +3,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+let voiceAppSchema = require('../models/voiceApp');
+
 let accessTokenSchema = new Schema({
-    access_token: {
-        type: String,
-        default: '',
-        unique: true,
-    },
-    refresh_token: {
-        type: String,
-        default: '',
-        unique: true,
-    },
-    expires_in: {
-        type: Number,
-        default: 300,
-    },
+    accessToken: String,
+    expires: Date,
+    clientId: String,
+    user: Schema.Types.Mixed,
     created_at: {
         type: Date,
         default: Date.now(),
@@ -27,5 +19,7 @@ let accessTokenSchema = new Schema({
         default: Date.now(),
     },
 });
+
+accessTokenSchema.index({expires: 1}, {expireAfterSeconds: 0});
 
 module.exports = mongoose.model('accessToken', accessTokenSchema);

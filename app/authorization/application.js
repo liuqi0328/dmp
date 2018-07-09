@@ -2,24 +2,12 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const uuidv4 = require('uuid/v4'); // uuid version 4 (random)
 
 let applicationSchema = new Schema({
-    app_id: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    client_id: {
-        type: String,
-        default: uuidv4(),
-        unique: true,
-    },
-    client_secret: {
-        type: String,
-        default: uuidv4(),
-        unique: true,
-    },
+    app_id: String,
+    clientId: String,
+    clientSecret: String,
+    grants: [String],
     created_at: {
         type: Date,
         default: Date.now(),
@@ -28,6 +16,10 @@ let applicationSchema = new Schema({
         type: Date,
         default: Date.now(),
     },
+});
+
+applicationSchema.post('save', async (doc) => {
+    console.log('%s has been saved: ', doc);
 });
 
 module.exports = mongoose.model('application', applicationSchema);

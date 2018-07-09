@@ -1,6 +1,6 @@
 // load the things we need
 const mongoose = require('mongoose');
-const Application = require('./application');
+const Application = require('../authorization/application');
 
 // define the schema for our voice application model
 let voiceAppSchema = new mongoose.Schema({
