@@ -1,7 +1,7 @@
 'use strict';
 
 let mongoose = require('mongoose');
-
+const dbDuplicateErrMsg = 'E11000 duplicate key error collection';
 /**
  * Configuration.
  */
@@ -91,6 +91,7 @@ let getAccessToken = (bearerToken, callback) => {
     return new Promise((resolve, reject) => {
         TokenModel.findOne({
             accessToken: bearerToken,
+            // expires: {$gt: Date.now()},
         }, (err, token) => {
             if (err) {
                 console.log('oauth model getAccessToken err');
@@ -189,6 +190,20 @@ let getClient = (clientId, clientSecret) => {
  */
 
 let saveToken = (token, client, user) => {
+    // let accessToken;
+    // try {
+    //     accessToken = new TokenModel({
+    //         accessToken: token.accessToken,
+    //         expires: token.accessTokenExpiresAt,
+    //         clientId: client.id,
+    //         user: user,
+    //     });
+    // } catch (err) {
+    //     console.log('======================');
+    //     console.log(err.message);
+    //     return accessToken;
+    // }
+
     let accessToken = new TokenModel({
         accessToken: token.accessToken,
         expires: token.accessTokenExpiresAt,
@@ -197,37 +212,59 @@ let saveToken = (token, client, user) => {
     });
 
     console.log('access token: ', accessToken);
-    // accessToken.save((err, doc) => {
-    //     if (err) {
-    //         console.error(err);
-    //         reject(err);
-    //     }
 
-    //     console.log('access token saved: ', doc);
-
-    //     return {
-    //         accessToken: doc.accessToken,
-    //         accessTokenExpiresAt: doc.expires,
-    //         client: { id: doc.clientId },
-    //         user: { id: doc.user._id },
-    //     };
-    // });
     return new Promise((resolve, reject) => {
         accessToken.save((err, doc) => {
             if (err) {
+                console.log('/////////////////////');
                 console.error(err);
+                // reject();
                 reject(err);
+                // if (err.message.startsWith(dbDuplicateErrMsg)) {
+                //     TokenModel.findOneAndUpdate(
+                //         {clientId: accessToken.clientId},
+                //         {
+                //             accessToken: token.accessToken,
+                //             expires: token.accessTokenExpiresAt,
+                //             user: user,
+                //         },
+                //         (err, doc) => {
+                //             if (err) {
+                //                 console.log('............');
+                //                 reject(err);
+                //             } else {
+                //                 let existingData = {
+                //                     accessToken: doc.accessToken,
+                //                     accessTokenExpiresAt: doc.expires,
+                //                     client: { id: doc.clientId },
+                //                     user: { id: doc.user._id },
+                //                 };
+                //                 resolve(existingData);
+                //             }
+                //         }
+                //     );
+                // }
+            } else {
+                console.log('access token saved: ', doc);
+
+                let data = {
+                    accessToken: doc.accessToken,
+                    accessTokenExpiresAt: doc.expires,
+                    client: { id: doc.clientId },
+                    user: { id: doc.user._id },
+                };
+                resolve(data);
             }
 
-            console.log('access token saved: ', doc);
+            // console.log('access token saved: ', doc);
 
-            let data = {
-                accessToken: doc.accessToken,
-                accessTokenExpiresAt: doc.expires,
-                client: { id: doc.clientId },
-                user: { id: doc.user._id },
-            };
-            resolve(data);
+            // let data = {
+            //     accessToken: doc.accessToken,
+            //     accessTokenExpiresAt: doc.expires,
+            //     client: { id: doc.clientId },
+            //     user: { id: doc.user._id },
+            // };
+            // resolve(data);
         });
     });
 };

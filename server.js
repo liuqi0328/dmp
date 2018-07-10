@@ -10,6 +10,8 @@ let passport = require('passport');
 let flash    = require('connect-flash');
 
 let OauthServer = require('oauth2-server');
+let authHelper = require('./app/authorization/helper');
+
 let morgan       = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser   = require('body-parser');
@@ -27,55 +29,11 @@ app.oauth = new OauthServer({
     // require authorization model definitions
     model: require('./app/authorization/model'),
     grants: ['client_credentials'],
-    accessTokenLifetime: 4 * 60 * 60,
+    accessTokenLifetime: 10, // 4 * 60 * 60
     debug: true,
 });
-app.all('/oauth/token', (req, res) => {
-    let request = new OauthServer.Request(req);
-    let response = new OauthServer.Response(res);
-    request.body = req.query;
-    app.oauth.token(request, response)
-        .then((token) => {
-            let data = {
-                access_token: token.accessToken,
-                expires_at: token.accessTokenExpiresAt,
-            };
-            res.json(data);
-        });
-});
-app.use('/api', (req, res, next) => {
-    let request = new OauthServer.Request(req);
-    let response = new OauthServer.Response(res);
-
-    // console.trace();
-
-    app.oauth.authenticate(request, response)
-        .then((token) => {
-            console.log('middleware token: ', token);
-
-            res.locals.oauth = { token: token };
-            next();
-        })
-        .catch((err) => {
-            // handle error condition
-            console.log(err);
-        });
-
-
-    // let request = new OauthServer.Request(req);
-    // let response = new OauthServer.Response(res);
-    // console.log('authentication..!');
-    // // app.oauth.authenticate(request, response, {}, next());
-
-    // try {
-    //     let token = await app.oauth.authenticate(request, response, {});
-    //     res.locals.oauth = {token: token};
-    //     next();
-    // } catch (err) {
-    //     console.error(err);
-    //     res.sendStatus(401);
-    // }
-});
+app.all('/oauth/token', authHelper(app).token);
+app.use('/api', authHelper(app).authenticate);
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev')); // log every request to the console
