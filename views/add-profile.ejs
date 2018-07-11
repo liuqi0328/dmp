@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+   <title>Beyond Voice by FRSH</title>
+   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+   <style>
+      body         { padding-top:80px; }
+   </style>
+</head>
+<body>
+<div class="container">
+<div class="col-sm-6 col-sm-offset-3">
+
+   <h1><span class="fa fa-sign-in"></span> Add user</h1>
+   <a href="/profile" class="btn btn-info">Back to profile</a>
+   
+   <h4>Account information: </h4>
+
+   <form action="/profile/edit-profile" method="post">
+      <label>First name: </label>
+      <input type="text" class="form-control" name="firstName">
+      <label>Last name: </label>
+      <input type="text" class="form-control" name="lastName">
+      <label>Email: </label>
+      <input type="text" class="form-control" name="email">
+      <label>Permissons: </label>
+      <input type="text" class="form-control" name="permissions">
+
+      <input type='hidden' class='form-control' name='userId'>
+      <input type="submit" value="Save changes" class="btn btn-info"/>
+   </form>
+
+   <div class="text-center">
+      <p><center>Fresh Digital Group Inc.</center></p>
+   </div>
+
+</div>
+</div>
+</body>
+</html>

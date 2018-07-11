@@ -40,8 +40,12 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    }
-
+    },
+    
+    permissions      : [String],
+    firstName        : String,
+    lastName         : String,
+    clientId         : Number
 });
 
 // generating a hash

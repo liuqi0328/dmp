@@ -15,10 +15,11 @@
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/profile/profile-info" class="btn btn-default">Profile info</a>
+        <a href="/profile/client-info" class="btn btn-default">Client info</a>
     </div>
 
     <div class="row">
-
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-6">
             <div class="well">
@@ -28,10 +29,12 @@
                     <p>
                         <strong>id</strong>: <%= user._id %><br>
                         <strong>email</strong>: <%= user.local.email %><br>
-                        <strong>password</strong>: <%= user.local.password %>
+                        <strong>password</strong>: <%= user.local.password %><br>
+                        <strong>permissions</strong>: <%= user.permissions %>
                     </p>
                     
                     <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                    <a href="profile/update/local" class="btn btn-default">Update account</a>
                 <% } else { %>
                     <a href="/connect/local" class="btn btn-default">Connect Local</a>
                 <% } %>

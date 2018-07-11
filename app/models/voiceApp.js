@@ -7,7 +7,7 @@ var voiceAppSchema = mongoose.Schema({
     name            : String,
     secret          : String,
     scope           : String,
-    owner           : String
+    ownerId         : Number
 });
 
 

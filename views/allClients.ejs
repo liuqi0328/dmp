@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <title>Beyond Voice by FRSH</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body                { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="col-sm-8 col-sm-offset-2">
+    <h1><span class="fa fa-sign-in"></span> Clients</h1>
+   
+    <h4>All clients: </h4>
+    
+    <a href="/profile/frsh/clients/add-client" class="btn btn-info">Add client</a>
+    <a href="/profile" class="btn btn-info">Back to profile</a>
+
+    <table class='table table-hover table-bordered'>
+        <tr class='active'>
+            <th class='col-md-2'>Client ID: </th>
+            <th class='col-md-10'>Client / Company: </th>
+            <th></th>
+            <th></th>
+        </tr>
+        <% for (var i = 1; i < data.length; i++) { %>
+            <tr>
+                <td><%= data[i].id %></td>
+                <td><%= data[i].name %></td>
+                <td>
+                    <form action="/profile/frsh/clients/users" method="get">
+                        <input type='hidden' class='form-control' name='clientId' value='<%= data[i].id %>'>
+                        <input type="submit" value="Users" class="btn btn-info"/>
+                    </form>
+                </td>
+                <td>
+                    <form action="/profile/delete-client" method="get">
+                        <input type='hidden' class='form-control' name='clientId' value='<%= data[i]._id %>'>
+                        <input type="submit" value="Delete client" class="btn btn-info"/>
+                    </form>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+
+    <div class="text-center">
+        <p><center>Fresh Digital Group Inc.</center></p>
+    </div>
+
+</div>
+</div>
+</body>
+</html>
