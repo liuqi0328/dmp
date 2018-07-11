@@ -1,67 +1,95 @@
 'use strict';
 
-const rp = require('request-promise');
+/*
+ * Report_interval:
+ *     Current Hour
+ *     Last Hour
+ *     Today
+ *     Yesterday
+ *     Last 48 Hours
+ *     Last Week
+ *     Last 30 days
+ *     Month to Date
+ *     Month to Yesterday
+ *
+ * Dimensions:
+ *     Developer ID
+ *     App ID
+ *     App Name
+ *     Developer Name
+ *     *Intent
+ *     *Intent Attribute
+ *     User ID
+ *     Device ID
+ *     Session ID
+ *     Application Type
+ *     Application Vertical
+ *     Session length
+ *
+ * Metrics:
+ *     Total Conversations
+ *     Engagement Rate %
+ *     Unknown Responses
+ *     Conversation Time (Min/Sec)
+ */
 
-exports.timeInterval = (req, res) => {
+const helper = require('./helper');
+
+exports.timeInterval = async (req, res) => {
     let client = res.locals.client;
+
+    // return unauthorized error if using the api key for a voice app
+    // if (!(client instanceof User)) return res.sendStatus(401);
+
+    let clientId = client.client_id;
     let timeInterval = req.params.time_interval;
 
     if (!timeInterval) {
         return res.json({message: 'Please provide a time interval param.'});
     }
 
-    let data;
-    switch (timeInterval) {
-        case 'current_hour':
-            data = currentHourInterval(accountId);
-            break;
-        case 'last_hour':
-        case 'today':
-        case 'yesterday':
-        case 'last_48_hours':
-        case 'last_week':
-        case 'last_30_days':
-        case 'month_to_date':
-        case 'month_to_yesterday':
+    let data = await helper.getDataFromAerospike(clientId, timeInterval);
+    if (data.length < 1) return res.sendStatus(404);
+
+    console.log(req.query);
+    let filteredData = await helper.filterDimensions(data, req.query);
+
+    let finalData = [];
+    for (let i = 0; i < filteredData.length; i++) {
+        let returnData = filteredData[i].bins.data;
+        finalData.push(returnData);
     }
-    return data;
-}
 
-let currentHourInterval = async (accountId) => {
-    let data = await getAccountData(accountId);
-    console.log(data);
-    if (!data) return;
-
-    let currentTime = new Date(Date.now());
-    let result = [];
-    for (let i = 0; i < data.length; i++) {
-        let timestamp = data[i].bins.data.timestamp;
-        let dataTime = new Date(timestamp);
-        if (currentTime - dataTime <= 3600000) result.push(data[i]);
-    }
-    console.log('result: ', result);
-    return result;
-};
-
-let getAccountData = async (accountId) => {
-    let options = {
-        method: 'GET',
-        uri: `http://localhost:8000/account/${accountId}`,
-        json: true,
-        headers: {
-            'User-Agent': 'BeyondVoiceSDK',
-        },
-    };
-    try {
-        let data = rp(options);
-        return data;
-    } catch (err) {
-        console.log('get account data from aerospike error...!');
-        console.error(err);
-        return;
+    if (finalData.length < 1) {
+        res.sendStatus(404);
+    } else {
+        res.send(finalData);
     }
 };
 
+exports.allMessages = async (req, res) => {
+    let client = res.locals.client;
 
+    // return unauthorized error if using the api key for a voice app
+    // if (!(client instanceof User)) return res.sendStatus(401);
 
-currentHourInterval("testOwner");
+    let clientId = client.client_id;
+
+    let data = await helper.getDataFromAerospike(clientId, '');
+    if (data.length < 1) return res.sendStatus(404);
+
+    console.log(req.query);
+    let filteredData = await helper.filterDimensions(data, req.query);
+
+    let finalData = [];
+    for (let i = 0; i < filteredData.length; i++) {
+        let returnData = filteredData[i].bins.data;
+        finalData.push(returnData);
+    }
+
+    if (finalData.length < 1) {
+        res.sendStatus(404);
+    } else {
+        res.send(finalData);
+    }
+};

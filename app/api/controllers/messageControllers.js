@@ -12,13 +12,13 @@ exports.sendMessage = async (req, res) => {
     let voiceApp = res.locals.client;
 
     let platform = voiceApp.platform;
-    let accountId = voiceApp.owner;
+    let clientId = voiceApp.client_id;
     let appId = voiceApp._id;
 
     let data = req.body;
     let dmpData = {
         platform: platform,
-        account_id: accountId,
+        client_id: clientId,
         app_id: appId,
     };
     data.dmp = dmpData;

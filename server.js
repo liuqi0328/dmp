@@ -19,14 +19,12 @@ let authHelper = require('./app/authorization/helper');
 
 // -------------- LINK TO MONGO DB -------------------
 mongoose.connect(configDB.url, {
-	useMongoClient: true // If bluebird not needed, delelete this!
+    useMongoClient: true, // If bluebird not needed, delelete this!
 });
 let db = mongoose.connection;
 
 // Check connection
-db.once('open', function(){
-  console.log('Connected to MongoDB');
-});
+db.once('open', () => console.log('Connected to MongoDB'));
 
 // set up our express application
 app.use('/api', authHelper.authenticate);
