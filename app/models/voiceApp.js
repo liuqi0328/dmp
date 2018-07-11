@@ -16,6 +16,7 @@ let voiceAppSchema = new mongoose.Schema({
         type: String,
         default: uniqid(),
     },
+    platform: String,
     created_at: {
         type: Date,
         default: Date.now(),

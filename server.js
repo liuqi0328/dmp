@@ -23,7 +23,7 @@ mongoose.connect(configDB.url); // connect to our database
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
-app.use("/api", authHelper.authenticate);
+app.use('/api', authHelper.authenticate);
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev')); // log every request to the console
@@ -46,7 +46,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
 require('./app/routes/routes')(app, passport); // load our routes and pass in our app and fully configured passport
 
-require('./app/routes/apiRoutes')(app);
+require('./app/api/routes/apiRoutes')(app);
 
 // authHelper.loadSampleApp();
 
