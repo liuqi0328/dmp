@@ -1,7 +1,7 @@
 const uuidv1 = require('uuid/v1');
-var User = require('./models/user');
-var Client = require('../app/models/client');
-var Invite = require('../app/models/invite');
+var User = require('../models/user');
+var Client = require('../models/client');
+var Invite = require('../models/invite');
 
 module.exports = function(app, passport) {
 // NORMAL ROUTES ===============================================================

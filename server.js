@@ -1,21 +1,21 @@
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
-var passport = require('passport');
-var flash    = require('connect-flash');
+// server.js
 
-var morgan       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+// set up ======================================================================
+// get all the tools we need
+let express  = require('express');
+let app      = express();
+let port     = process.env.PORT || 8080;
+let mongoose = require('mongoose');
+let passport = require('passport');
+let flash    = require('connect-flash');
 
-// Pass passport for configuration
-require('./config/passport')(passport);
+let morgan       = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser   = require('body-parser');
+let session      = require('express-session');
 
-// Connect with our database:
-var configDB = require('./config/database.js');
-mongoose.Promise = require('bluebird'); // used for promises. Not sure if needed...
+let configDB = require('./config/database.js');
+let authHelper = require('./app/authorization/helper');
 
 // -------------- LINK TO MONGO DB -------------------
 mongoose.connect(configDB.url, {
@@ -28,36 +28,34 @@ db.once('open', function(){
   console.log('Connected to MongoDB');
 });
 
-// Check for DB errors
-db.on('error', function(err){
-  console.log(err);
-});
+// set up our express application
+app.use('/api', authHelper.authenticate);
 
-// -------------- SET UP EXPRESS APP -------------------
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-
-// Get information from html forms
-// Needed to communicate between client and server. 
-app.use(bodyParser.json()); 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Set up ejs for templating
 app.set('view engine', 'ejs');
 
 // -------------- REQUIREMENTS PASSPORT -------------------
 app.use(session({
-   secret: 'ilovescotchscotchyscotchscotch', // session secret
-   resave: true,
-   saveUninitialized: true
+    secret: 'ilovescotchscotchyscotchscotch', // session secret
+    resave: true,
+    saveUninitialized: true,
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// --------------------- ROUTES ---------------------------
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+// routes ======================================================================
+require('./app/routes/routes')(app, passport); // load our routes and pass in our app and fully configured passport
+
+require('./app/api/routes/apiRoutes')(app);
+
+// authHelper.loadSampleApp();
 
 // -------------------- LAUNCH -----------------------------
 app.listen(port);
