@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const uniqid = require('uniqid');
 const Schema = mongoose.Schema;
 
-let User = require('../../models/user');
-let VoiceApp = require('../../models/voiceApp');
+// let User = require('../../models/user');
+// let VoiceApp = require('../../models/voiceApp');
 
 let apiKeySchema = new Schema({
     api_key: {

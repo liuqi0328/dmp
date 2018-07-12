@@ -58,9 +58,9 @@ exports.loadSampleApp = () => {
 
 /**
  * Given an API Key, returns the owner of the API Key.
- * Returns either a User or a VoiceApp.
+ *
  * @param  {string} apiKey
- * @return {object}
+ * @return {object}        Returns either a User or a VoiceApp
  */
 let getApiKeyOwner = async (apiKey) => {
     let keyInfo;

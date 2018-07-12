@@ -38,6 +38,7 @@ const helper = require('./helper');
 exports.timeInterval = async (req, res) => {
     let client = res.locals.client;
 
+    // TODO: uncomment to check for user
     // return unauthorized error if using the api key for a voice app
     // if (!(client instanceof User)) return res.sendStatus(401);
 
@@ -70,6 +71,7 @@ exports.timeInterval = async (req, res) => {
 exports.allMessages = async (req, res) => {
     let client = res.locals.client;
 
+    // TODO: uncomment to check for user
     // return unauthorized error if using the api key for a voice app
     // if (!(client instanceof User)) return res.sendStatus(401);
 
