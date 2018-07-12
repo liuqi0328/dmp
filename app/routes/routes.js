@@ -11,14 +11,14 @@ module.exports = function(app, passport) {
       // The code in comments is to manually add things to the DB's!!!
       // ----------------------
 
-      Invite.find({}, (err, data) => {
-         if (err) 
-            console.log(err);
+      // Invite.find({}, (err, data) => {
+      //    if (err) 
+      //       console.log(err);
 
-         console.log(data);
-      });
+      //    console.log(data);
+      // });
 
-      // User.remove({}, function(err) { 
+      // Client.remove({}, function(err) { 
       //    console.log('collection removed') 
       // });
 
@@ -29,12 +29,12 @@ module.exports = function(app, passport) {
       //    console.log(data);
       // });
 
-      // let query = {_id:'5b33f1c65f4305167ee010cd'}
+      let query = {_id:'5b4798288935a507961a1f52'}
 
-      // // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
-      // User.update(query, {role: 'Admin'}, function(err, result) {
-      //    console.log('result: ', result);
-      // })
+      // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
+      User.update(query, {permissions: ['FRSH Admin']}, function(err, result) {
+         console.log('result: ', result);
+      })
 
       // let currentTime = Date.now();
       // var newClient = new Client();
@@ -81,7 +81,6 @@ module.exports = function(app, passport) {
                failureRedirect : '/login', // redirect back to the signup page if there is an error
                failureFlash : true // allow flash messages
             }), (req, res) => {
-               console.log('req: ', req);
                // If this user is a FRSH admin...
                if (req.user.permissions.indexOf('FRSH Admin') > -1) { 
                   res.redirect('/profile/frsh');
@@ -264,8 +263,9 @@ module.exports = function(app, passport) {
                app.get('/profile/frsh/clients', isLoggedIn, function(req, res) {
                   Client.find({}, (err, data) => {
                      if (err) 
-                        console.log(err);
+                        throw err;
 
+                     console.log('data: ', data);
                      res.render('allClients.ejs', {
                         data : data
                      });
@@ -320,6 +320,7 @@ module.exports = function(app, passport) {
 
                                  return newClient;
                               });
+                              console.log('newClient: ', newClient);
                            });
                         }
                      });

@@ -11,12 +11,12 @@ module.exports = function(app, passport) {
       // The code in comments is to manually add things to the DB's!!!
       // ----------------------
 
-      Invite.find({}, (err, data) => {
-         if (err) 
-            console.log(err);
+      // Invite.find({}, (err, data) => {
+      //    if (err) 
+      //       console.log(err);
 
-         console.log(data);
-      });
+      //    console.log(data);
+      // });
 
       // User.remove({}, function(err) { 
       //    console.log('collection removed') 
@@ -29,12 +29,12 @@ module.exports = function(app, passport) {
       //    console.log(data);
       // });
 
-      // let query = {_id:'5b33f1c65f4305167ee010cd'}
+      let query = {_id:'5b4780595273fa064c6ab0ee'}
 
-      // // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
-      // User.update(query, {role: 'Admin'}, function(err, result) {
-      //    console.log('result: ', result);
-      // })
+      // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
+      User.update(query, {permissions: 'FRSH Admin'}, function(err, result) {
+         console.log('result: ', result);
+      })
 
       // let currentTime = Date.now();
       // var newClient = new Client();
@@ -81,12 +81,11 @@ module.exports = function(app, passport) {
                failureRedirect : '/login', // redirect back to the signup page if there is an error
                failureFlash : true // allow flash messages
             }), (req, res) => {
-               console.log('req: ', req);
                // If this user is a FRSH admin...
                if (req.user.permissions.indexOf('FRSH Admin') > -1) { 
                   res.redirect('/profile/frsh');
                } else {
-                  res.redirect('/profile');
+                  res.redirect('/profile/frsh');
                }
             })
 
@@ -415,7 +414,7 @@ module.exports = function(app, passport) {
       app.get('/profile/profile-info', isLoggedIn, async function(req, res) {
          let currentUser = req.user;
          User.find({}, (err, data) => {
-            if (err) 
+            if (err)
                console.log(err);
 
             res.render('profile-info.ejs', {
