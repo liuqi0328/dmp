@@ -1,6 +1,8 @@
+'use strict';
+
 // load the things we need
 const mongoose = require('mongoose');
-const uniqid = require('uniqid');
+let ApiKey = require('../authorization/models/apiKey');
 
 // define the schema for our voice application model
 let voiceAppSchema = new mongoose.Schema({
@@ -8,13 +10,9 @@ let voiceAppSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    owner: {
+    client_id: {
         type: String,
         required: true,
-    },
-    api_key: {
-        type: String,
-        default: uniqid(),
     },
     platform: String,
     created_at: {
@@ -27,16 +25,19 @@ let voiceAppSchema = new mongoose.Schema({
     },
 });
 
-// /*
-//  * Create Application (`client_id` and `client_secret`) after creating a voice
-//  * application.
-//  */
-// voiceAppSchema.post('save', async (doc) => {
-//     console.log('%s has been saved', doc._id);
-//     let appId = doc._id;
-//     let application = await Application.create({app_id: appId});
-//     console.log('application created', application);
-// });
+/*
+ * Create API Key for the application after creating a voice
+ * application.
+ */
+voiceAppSchema.post('save', async (doc) => {
+    console.log('%s has been saved', doc._id);
+    let appId = doc._id;
+    let apiKey = await ApiKey.create({
+        owner_type: 'app',
+        owner_id: appId,
+    });
+    console.log('api key created', apiKey);
+});
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('voiceApp', voiceAppSchema);

@@ -1,321 +1,290 @@
+'use strict';
+
 const uuidv1 = require('uuid/v1');
 var User = require('../models/user');
 var Client = require('../models/client');
 var Invite = require('../models/invite');
 
+const voiceAppController = require('../controllers/voiceAppController');
+const profileController = require('../controllers/profileController');
+const passportController = require('../controllers/passportController');
+
 module.exports = function(app, passport) {
-// NORMAL ROUTES ===============================================================
-// show the home page (will also have our login links)
-   app.get('/', function(req, res) {
-      
-      // The code in comments is to manually add things to the DB's!!!
-      // ----------------------
+    app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);
 
-      // Invite.find({}, (err, data) => {
-      //    if (err) 
-      //       console.log(err);
+    // NORMAL ROUTES ===============================================================
+    // show the home page (will also have our login links)
+    app.get('/', function(req, res) {
 
-      //    console.log(data);
-      // });
+        // The code in comments is to manually add things to the DB's!!!
+        // ----------------------
 
-      // Client.remove({}, function(err) { 
-      //    console.log('collection removed') 
-      // });
+        Invite.find({}, (err, data) => {
+            if (err)
+            console.log(err);
+            console.log(data);
+        });
 
-      // User.find({}, (err, data) => {
-      //    if (err) 
-      //       console.log(err);
+        // User.remove({}, function(err) {
+        //    console.log('collection removed')
+        // });
 
-      //    console.log(data);
-      // });
+        // User.find({}, (err, data) => {
+        //    if (err)
+        //       console.log(err);
 
-      let query = {_id:'5b4798288935a507961a1f52'}
+        //    console.log(data);
+        // });
 
-      // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
-      User.update(query, {permissions: ['FRSH Admin']}, function(err, result) {
-         console.log('result: ', result);
-      })
+        // let query = {_id:'5b33f1c65f4305167ee010cd'}
 
-      // let currentTime = Date.now();
-      // var newClient = new Client();
-      // newClient.id = 1;
-      // newClient.name = 'Fresh Digital Group';
-      // newClient.timeCreated = currentTime;
-      // newClient.save();
+        // // User.update = function ({}, {cid: ''}, {multi: true}, function(err) { ... });
+        // User.update(query, {role: 'Admin'}, function(err, result) {
+        //    console.log('result: ', result);
+        // })
 
-      //------------------------
+        // let currentTime = Date.now();
+        // var newClient = new Client();
+        // newClient.id = 1;
+        // newClient.name = 'Fresh Digital Group';
+        // newClient.timeCreated = currentTime;
+        // newClient.save();
 
-      res.render('index.ejs');
-   });
+        //------------------------
 
-   // PROFILE SECTION =========================
-   app.get('/profile', isLoggedIn, function(req, res) {
-      res.render('profile.ejs', {
-         user : req.user
-      });
-   });
+        res.render('index.ejs');
+    });
 
-   // LOGOUT ==============================
-   app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
-   });
+    // PROFILE SECTION =========================
+    app.get('/profile', isLoggedIn, profileController.getProfile);
 
-   app.get('/console', function(req, res) {
-      res.render('console.ejs');
-   });
+    // LOGOUT ==============================
+    app.get('/logout', passportController.logOut);
 
-   // =============================================================================
-   // AUTHENTICATE (FIRST LOGIN) ==================================================
-   // =============================================================================
+    app.get('/console', passportController.getConsole);
 
-      // locally --------------------------------
-         // LOGIN ===============================
-            // show the login form
-            app.get('/login', function(req, res) {
-               res.render('login.ejs', { message: req.flash('loginMessage') });
-            });
+    // =============================================================================
+    // AUTHENTICATE (FIRST LOGIN) ==================================================
+    // =============================================================================
 
-            // process the login form
-            app.post('/login', passport.authenticate('local-login', {
-               failureRedirect : '/login', // redirect back to the signup page if there is an error
-               failureFlash : true // allow flash messages
-            }), (req, res) => {
-               // If this user is a FRSH admin...
-               if (req.user.permissions.indexOf('FRSH Admin') > -1) { 
-                  res.redirect('/profile/frsh');
-               } else {
-                  res.redirect('/profile');
-               }
-            })
+    // locally --------------------------------
+    // LOGIN ===============================
+    // show the login form
+    app.get('/login', passportController.getLogIn);
 
-         // SIGNUP =================================
-            // show the signup form
-            app.get('/signup', function(req, res) {
-               res.render('signup.ejs', { message: req.flash('signupMessage') });
-            });
+    // process the login form
+    app.post('/login', passport.authenticate('local-login', {
+        failureRedirect: '/login', // redirect back to the signup page if there is an error
+        failureFlash: true, // allow flash messages
+    }), passportController.postLogIn);
 
-            // process the signup form
-            app.post('/signup', passport.authenticate('local-signup', {
-               successRedirect : '/profile', // redirect to the secure profile section
-               failureRedirect : '/signup', // redirect back to the signup page if there is an error
-               failureFlash : true // allow flash messages
-            }));
+    // SIGNUP =================================
+    // show the signup form
+    app.get('/signup', passportController.getSignUp);
 
-      // facebook -------------------------------
-         // send to facebook to do the authentication
-         app.get('/auth/facebook', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
+    // process the signup form
+    app.post('/signup', passport.authenticate('local-signup', {
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureFlash: true, // allow flash messages
+    }));
 
-         // handle the callback after facebook has authenticated the user
-         app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // facebook -------------------------------
+    // send to facebook to do the authentication
+    app.get('/auth/facebook', passport.authenticate('facebook', {
+        scope: ['public_profile', 'email'],
+    }));
 
-      // twitter --------------------------------
-         // send to twitter to do the authentication
-         app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
+    // handle the callback after facebook has authenticated the user
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-         // handle the callback after twitter has authenticated the user
-         app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // twitter --------------------------------
+    // send to twitter to do the authentication
+    app.get('/auth/twitter', passport.authenticate('twitter', {
+        scope: 'email',
+    }));
 
-      // google ---------------------------------
-         // send to google to do the authentication
-         app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    // handle the callback after twitter has authenticated the user
+    app.get('/auth/twitter/callback', passport.authenticate('twitter', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-         // the callback after google has authenticated the user
-         app.get('/auth/google/callback', passport.authenticate('google', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // google ---------------------------------
+    // send to google to do the authentication
+    app.get('/auth/google', passport.authenticate('google', {
+        scope: ['profile', 'email'],
+    }));
 
-      // amazon ---------------------------------
-         // send to google to do the authentication
-         app.get('/auth/amazon', passport.authenticate('amazon', { scope : ['profile', 'email'] }));
+    // the callback after google has authenticated the user
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-         // the callback after google has authenticated the user
-         app.get('/auth/amazon/callback', passport.authenticate('amazon', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
-       
-   // =============================================================================
-   // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-   // =============================================================================
+    // amazon ---------------------------------
+    // send to google to do the authentication
+    app.get('/auth/amazon', passport.authenticate('amazon', {
+        scope: ['profile', 'email'],
+    }));
 
-      // locally --------------------------------
-         app.get('/connect/local', function(req, res) {
-            res.render('connect-local.ejs', { message: req.flash('loginMessage') });
-         });
-         app.post('/connect/local', passport.authenticate('local-signup', {
-            successRedirect : '/profile', // redirect to the secure profile section
-            failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
-         }));
+    // the callback after google has authenticated the user
+    app.get('/auth/amazon/callback', passport.authenticate('amazon', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-      // facebook -------------------------------
-         // send to facebook to do the authentication
-         app.get('/connect/facebook', passport.authorize('facebook', { scope : ['public_profile', 'email'] }));
+    // =========================================================================
+    // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =========
+    // =========================================================================
 
-         // handle the callback after facebook has authorized the user
-         app.get('/connect/facebook/callback', passport.authorize('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // locally --------------------------------
+    app.get('/connect/local', passportController.getAuthorizeLocal);
+    app.post('/connect/local', passport.authenticate('local-signup', {
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/connect/local', // redirect back to the signup page if there is an error
+        failureFlash: true, // allow flash messages
+    }));
 
-      // twitter --------------------------------
-         // send to twitter to do the authentication
-         app.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
+    // facebook -------------------------------
+    // send to facebook to do the authentication
+    app.get('/connect/facebook', passport.authorize('facebook', {
+        scope: ['public_profile', 'email'],
+    }));
 
-         // handle the callback after twitter has authorized the user
-         app.get('/connect/twitter/callback', passport.authorize('twitter', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // handle the callback after facebook has authorized the user
+    app.get('/connect/facebook/callback', passport.authorize('facebook', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-      // google ---------------------------------
-         // send to google to do the authentication
-         app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
+    // twitter --------------------------------
+    // send to twitter to do the authentication
+    app.get('/connect/twitter', passport.authorize('twitter', {
+        scope: 'email',
+    }));
 
-         // the callback after google has authorized the user
-         app.get('/connect/google/callback', passport.authorize('google', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // handle the callback after twitter has authorized the user
+    app.get('/connect/twitter/callback', passport.authorize('twitter', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-      // amazon ---------------------------------
-         // send to google to do the authentication
-         app.get('/connect/amazon', passport.authorize('amazon', { scope : ['profile', 'email'] }));
+    // google ---------------------------------
+    // send to google to do the authentication
+    app.get('/connect/google', passport.authorize('google', {
+        scope: ['profile', 'email'],
+    }));
 
-         // the callback after google has authorized the user
-         app.get('/connect/amazon/callback', passport.authorize('amazon', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-         }));
+    // the callback after google has authorized the user
+    app.get('/connect/google/callback', passport.authorize('google', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-   // =============================================================================
-   // UNLINK ACCOUNTS =============================================================
-   // =============================================================================
-   // Used to unlink accounts. 
-   // For social accounts, just remove the token.
-   // For local account, remove email and password.
-   // User account will stay active in case they want to reconnect in the future
+    // amazon ---------------------------------
+    // send to google to do the authentication
+    app.get('/connect/amazon', passport.authorize('amazon', {
+        scope: ['profile', 'email'],
+    }));
 
-   // local -----------------------------------
-      app.get('/unlink/local', isLoggedIn, function(req, res) {
-         var user            = req.user;
-         user.local.email    = undefined;
-         user.local.password = undefined;
-         user.save(function(err) {
-            res.redirect('/profile');
-         });
-      });
+    // the callback after google has authorized the user
+    app.get('/connect/amazon/callback', passport.authorize('amazon', {
+        successRedirect: '/profile',
+        failureRedirect: '/',
+    }));
 
-   // facebook -------------------------------
-      app.get('/unlink/facebook', isLoggedIn, function(req, res) {
-         var user            = req.user;
-         user.facebook.token = undefined;
-         user.save(function(err) {
-            res.redirect('/profile');
-         });
-      });
+    // =========================================================================
+    // UNLINK ACCOUNTS =========================================================
+    // =========================================================================
+    // Used to unlink accounts.
+    // For social accounts, just remove the token.
+    // For local account, remove email and password.
+    // User account will stay active in case they want to reconnect in the future
 
-   // twitter --------------------------------
-      app.get('/unlink/twitter', isLoggedIn, function(req, res) {
-         var user           = req.user;
-         user.twitter.token = undefined;
-         user.save(function(err) {
-            res.redirect('/profile');
-         });
-      });
+    // local -----------------------------------
+    app.get('/unlink/local', isLoggedIn, passportController.getUnlinkLocal);
 
-   // google ---------------------------------
-      app.get('/unlink/google', isLoggedIn, function(req, res) {
-         var user          = req.user;
-         user.google.token = undefined;
-         user.save(function(err) {
-            res.redirect('/profile');
-         });
-      });
+    // facebook -------------------------------
+    app.get('/unlink/facebook', isLoggedIn, passportController.getUnlinkFacebook);
 
-   // amazon ---------------------------------
-      app.get('/unlink/amazon', isLoggedIn, function(req, res) {
-         var user          = req.user;
-         user.google.token = undefined;
-         user.save(function(err) {
-            res.redirect('/profile');
-         });
-      });
+    // twitter --------------------------------
+    app.get('/unlink/twitter', isLoggedIn, passportController.getUnlinkTwitter);
 
-   // =============== TESTING ====================
-      // Login FRSH Users
-         // Profile page / home page
-         app.get('/profile/frsh', isLoggedIn, function(req, res) {
+    // google ---------------------------------
+    app.get('/unlink/google', isLoggedIn, passportController.getUnlinkGoogle);
+
+    // amazon ---------------------------------
+    app.get('/unlink/amazon', isLoggedIn, passportController.getUnlinkAmazon);
+
+    // =============== TESTING ====================
+        // Login FRSH Users
+            // Profile page / home page
+            app.get('/profile/frsh', isLoggedIn, function(req, res) {
             res.render('frsh-home.ejs', {
-               user : req.user
+                user : req.user
             });
-         });
+            });
 
             // Clients page
-               app.get('/profile/frsh/clients', isLoggedIn, function(req, res) {
-                  Client.find({}, (err, data) => {
-                     if (err) 
-                        throw err;
-
-                     console.log('data: ', data);
-                     res.render('allClients.ejs', {
-                        data : data
-                     });
-                  });
-               });
-
-               // Delete client
-                  app.get('/profile/delete-client', isLoggedIn, function(req, res) {
-                     let clientId = req.query.clientId; // Account to delete
-
-                     Client.findOne({_id: clientId}).remove().exec();
-                     res.redirect('/profile/frsh/clients');
-                  });
-
-               // Add client
-                  app.get('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
-                     res.render('add-client.ejs');
-                  });
-
-                  app.post('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
-                     Client.findOne({ 'name' : req.body.clientName }, function(err, client) {
+                app.get('/profile/frsh/clients', isLoggedIn, function(req, res) {
+                    Client.find({}, (err, data) => {
                         if (err)
-                           throw err;
+                        console.log(err);
+
+                        res.render('allClients.ejs', {
+                        data : data
+                        });
+                    });
+                });
+
+                // Delete client
+                    app.get('/profile/delete-client', isLoggedIn, function(req, res) {
+                        let clientId = req.query.clientId; // Account to delete
+
+                        Client.findOne({_id: clientId}).remove().exec();
+                        res.redirect('/profile/frsh/clients');
+                    });
+
+                // Add client
+                    app.get('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
+                        res.render('add-client.ejs');
+                    });
+
+                    app.post('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
+                        Client.findOne({ 'name' : req.body.clientName }, function(err, client) {
+                        if (err)
+                            throw err;
 
                         if (client)
-                           return req.flash('addClientMessage', 'That client already exists.');
-                           //this flash is probably not working. You're not printing it.
+                            return req.flash('addClientMessage', 'That client already exists.');
+                            //this flash is probably not working. You're not printing it.
 
                         else {
-                           Client.find(function(err, result) {
-                              var clients = JSON.parse(JSON.stringify(result));
-                              if (err)
-                                 throw err;
+                            Client.find(function(err, result) {
+                                var clients = JSON.parse(JSON.stringify(result));
+                                if (err)
+                                    throw err;
 
-                              let nextId;
-                              let currentTime = Date.now();
-                              for (let i = 0; i < clients.length; i++) {
-                                 if (nextId == null || nextId <= clients[i].id) 
+                                let nextId;
+                                let currentTime = Date.now();
+                                for (let i = 0; i < clients.length; i++) {
+                                    if (nextId == null || nextId <= clients[i].id)
                                     nextId = clients[i].id + 1;
-                                 
-                                 else
-                                    continue;
-                              }
 
-                              var newClient = new Client();
-                              newClient.id = nextId;
-                              newClient.name = req.body.clientName;
-                              newClient.timeCreated = currentTime;
-                              newClient.save(function(err) {
-                                 if (err)
+                                    else
+                                    continue;
+                                }
+
+                                var newClient = new Client();
+                                newClient.id = nextId;
+                                newClient.name = req.body.clientName;
+                                newClient.timeCreated = currentTime;
+                                newClient.save(function(err) {
+                                    if (err)
                                     throw err;
 
                                  return newClient;
@@ -323,248 +292,156 @@ module.exports = function(app, passport) {
                               console.log('newClient: ', newClient);
                            });
                         }
-                     });
+                        });
 
-                     res.redirect('/profile/frsh/clients');
-                  })
+                        res.redirect('/profile/frsh/clients');
+                    })
 
-               // Client users
-                  app.get('/profile/frsh/clients/users', isLoggedIn, function(req, res) {
-                     let clientId = req.query.clientId;
+                // Client users
+                    app.get('/profile/frsh/clients/users', isLoggedIn, function(req, res) {
+                        let clientId = req.query.clientId;
 
-                     User.find({ownerId:clientId}, (err, data) => {
+                        User.find({ownerId:clientId}, (err, data) => {
                         if (err)
-                           console.log(err);
+                            console.log(err);
 
                         res.render('client-users.ejs', {
-                           users : data
+                            users : data
                         });
-                     });
-                  });
+                        });
+                    });
 
-                  // Invite new user
-                  app.get('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
-                     res.render('invite-user.ejs', {
+                    // Invite new user
+                    app.get('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
+                        res.render('invite-user.ejs', {
                         inviterId : req.user._id
-                     });
-                  });
+                        });
+                    });
 
-                  app.post('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
-                     Invite.findOne({ 'email' : req.body.userEmail }, function(err, invite) {
+                    app.post('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
+                        Invite.findOne({ 'email' : req.body.userEmail }, function(err, invite) {
                         if (err)
-                           throw err;
+                            throw err;
 
                         if (invite)
-                           return req.flash('inviteUserMessage', 'That user is already invited.');
+                            return req.flash('inviteUserMessage', 'That user is already invited.');
 
                         else {
-                           var currentTime = Date.now();
+                            var currentTime = Date.now();
 
-                           var newInvite = new Invite();
-                           newInvite.email = req.body.userEmail;
-                           newInvite.permissions.push(req.body.userPermissions);
-                           newInvite.clientId = req.body.clientId;
-                           newInvite.uuid = uuidv1();
-                           newInvite.timeCreated = currentTime;
-                           newInvite.inviterId = req.body.inviterId;
+                            var newInvite = new Invite();
+                            newInvite.email = req.body.userEmail;
+                            newInvite.permissions.push(req.body.userPermissions);
+                            newInvite.clientId = req.body.clientId;
+                            newInvite.uuid = uuidv1();
+                            newInvite.timeCreated = currentTime;
+                            newInvite.inviterId = req.body.inviterId;
 
-                           newInvite.save(function(err) {
-                              if (err)
-                                 throw err;
+                            newInvite.save(function(err) {
+                                if (err)
+                                    throw err;
 
-                              return newInvite;
-                           });
+                                return newInvite;
+                            });
                         }
 
                         res.redirect('/profile/frsh/clients/users');
-                     });
+                        });
 
-                     // We can invite a new user. The information above is saved in that table.
-                     // Whe should now console.log a link to /invite?uuid={uuid}
-                     // Print all data in invite model / can be deleted
-                     Invite.find({}, (err, data) => {
-                        if (err) 
-                           console.log(err);
+                        // We can invite a new user. The information above is saved in that table.
+                        // Whe should now console.log a link to /invite?uuid={uuid}
+                        // Print all data in invite model / can be deleted
+                        Invite.find({}, (err, data) => {
+                        if (err)
+                            console.log(err);
 
                         console.log(data);
-                     });
-                     // --------------------------
-                  });
+                        });
+                        // --------------------------
+                    });
 
             // Access to all users (for a specific client)
-               // User settings
-                  // Delete user
-                  // Add user
-                  // Edit user settings
+                // User settings
+                    // Delete user
+                    // Add user
+                    // Edit user settings
 
-      // Login client-user (admin)
-         // User settings
+        // Login client-user (admin)
+            // User settings
             // Invite new user
             // Delete user
 
-      // Login client-user (user)
-         // Edit user settings
-         // Delete user
+        // Login client-user (user)
+            // Edit user settings
+            // Delete user
 
 
-      // In profile are 2 options:
-      // 1. Profile info: show all users + their client-/company-number
-      // 2. Client info: show all clients/companies. When you click on a company
+        // In profile are 2 options:
+        // 1. Profile info: show all users + their client-/company-number
+        // 2. Client info: show all clients/companies. When you click on a company
 
-      // -------------- PROFILE SECTION -------------------
-      // Start page:
-      app.get('/profile/profile-info', isLoggedIn, async function(req, res) {
-         let currentUser = req.user;
-         User.find({}, (err, data) => {
-            if (err) 
-               console.log(err);
+        // -------------- PROFILE SECTION -------------------
+        // Start page:
+        app.get('/profile/profile-info',
+                isLoggedIn,
+                profileController.getProfileInfo);
 
-            res.render('profile-info.ejs', {
-               user : currentUser,
-               data : data
-            });
-         });
-      })
+        // Options in profile info:
+        // 1. Add user
+        // 2. Delete user
+        // 3. Edit user
 
-      // Options in profile info: 
-      // 1. Add user
-      // 2. Delete user
-      // 3. Edit user
+        // app.get('/profile/add-profile', isLoggedIn, function(req, res) {
+        //    res.render('add-profile.ejs');
+        // });
 
-      // app.get('/profile/add-profile', isLoggedIn, function(req, res) {
-      //    res.render('add-profile.ejs');
-      // });
+        app.get('/profile/delete-profile',
+                isLoggedIn,
+                profileController.getDeleteProfile);
 
-      app.get('/profile/delete-profile', isLoggedIn, async function(req, res) {
-         let accountID = req.query.accountId; // Account to delete
+        // Edit profile settings (email and permissions can be changed)
+        app.get('/profile/edit-profile',
+                isLoggedIn,
+                profileController.getEditProfile);
 
-         User.findOne({_id: accountID}).remove().exec();
-         res.redirect('/profile/profile-info');
-      });
+        app.post('/profile/edit-profile',
+                 isLoggedIn,
+                 profileController.postEditProfile);
 
-      // Edit profile settings (email and permissions can be changed)
-      app.get('/profile/edit-profile', isLoggedIn, async function(req, res) {
-         let userId = req.query.userId;
-
-         User.find({_id:userId}, (err, data) => {
-            if (err)
-               console.log(err);
-
-            res.render('edit-profile.ejs', {
-               user : data
-            });
-         });
-      });
-
-      app.post('/profile/edit-profile', isLoggedIn, function(req, res) {
-         console.log('req.body: ', req.body)
-         let userId = req.body.userId;
-
-         // Check if ownerId exists...
-         Client.count({id: req.body.ownerId}, function(err, count) {
-            if (count == 0) {
-               let data;
-               User.find({_id: userId}, function(err, result) {
-                  if (err)
-                     throw err
-                  data = result;
-
-                  res.render('edit-profile.ejs', { 
-                     message: 'That is not a valid client id.',
-                     user: data
-                  });
-               });
-            }
-            
-            else {
-               let updatedUser = new User({
-                  firstname   : req.body.firstname,
-                  lastName    : req.body.lastName,
-                  role        : req.body.permissions,
-                  ownerId     : req.body.ownerId,
-                  local       : {
-                     email    : req.body.email
-                  }
-               });
-               updatedUser = updatedUser.toObject();
-               delete updatedUser._id;
-
-               User.update({_id:userId}, updatedUser, { upsert : true }, function(err, result) {
-                  if (err)
-                     throw err;
-
-                  console.log(result);
-                  res.redirect('/profile/profile-info');
-               })
-            }
-         })
-
-
-         // --------------------
-         // Client.find({id: req.body.ownerId}, function(err, result) {
-         //    if (err)
-         //       res.render('edit-profile.ejs', { message: 'That is not a valid client id.' });
-
-         //    else {
-         //       let updatedUser = new User({
-         //          firstname   : req.body.firstname,
-         //          lastName    : req.body.lastName,
-         //          role        : req.body.permissions,
-         //          ownerId     : req.body.ownerId,
-         //          local       : {
-         //             email    : req.body.email
-         //          }
-         //       });
-         //       updatedUser = updatedUser.toObject();
-         //       delete updatedUser._id;
-
-         //       User.update({_id:userId}, updatedUser, { upsert : true }, function(err, result) {
-         //          if (err)
-         //             throw err;
-
-         //          console.log(result);
-         //          res.redirect('/profile/profile-info');
-         //       })
-         //    }
-         // })
-
-         
-      });
-
-      // ----------- NOT USED AT THE MOMENT -------------
-      // Update local account
-      app.get('/profile/update/local', isLoggedIn, async function(req, res) {
-         res.render('update-user.ejs', {
+        // ----------- NOT USED AT THE MOMENT -------------
+        // Update local account
+        app.get('/profile/update/local', isLoggedIn, async function(req, res) {
+            res.render('update-user.ejs', {
             message: req.flash('localUpdateMessage'),
-            user : req.user
-         });
-      });
+            user: req.user,
+            });
+        });
 
-      app.post('/profile/update/local', function(req, res) {
-         console.log('req body: ', req.body);
-         let userId = req.session.passport.user;
+        app.post('/profile/update/local', function(req, res) {
+            console.log('req body: ', req.body);
+            let userId = req.session.passport.user;
 
-         let local = {};
-         local.email = req.body.email;
-         local.password = req.body.password;
+            let local = {};
+            local.email = req.body.email;
+            local.password = req.body.password;
 
-         // query that finds the id that needs to be updated.
-         let query = {_id:userId}
+            // query that finds the id that needs to be updated.
+            let query = {_id: userId};
 
-         User.update(query, {local: local}, function(err) {
-            if (err) {
-               console.log(err);
-            } else {
-               res.redirect('/profile');
-            }
-         })
-      });
-   };
+            User.update(query, {local: local}, function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/profile');
+                }
+            });
+        });
+};
 
 // route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
-   if (req.isAuthenticated())
-      return next();
+    if (req.isAuthenticated())
+        return next();
 
-   res.redirect('/');
+    res.redirect('/');
 }

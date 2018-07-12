@@ -10,8 +10,8 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "method-override": "~2.3.6",
-    "mongoose": "^4.13.14",
-    "morgan": "~1.7.0",
+    "mongoose": "~4.13.1",
+    "morgan": "^1.9.0",
     "passport": "~0.3.2",
     "passport-amazon": "^1.0.0",
     "passport-facebook": "~2.1.1",
@@ -19,6 +19,7 @@
     "passport-local": "~1.0.0",
     "passport-twitter": "~1.0.4",
     "request-promise": "^4.2.2",
-    "uniqid": "^5.0.3"
+    "uniqid": "^5.0.3",
+    "uuid": "^3.3.2"
   }
 }
