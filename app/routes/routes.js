@@ -20,9 +20,7 @@ module.exports = function(app, passport) {
         // ----------------------
 
         Invite.find({}, (err, data) => {
-            if (err)
-            console.log(err);
-
+            if (err) console.log(err);
             console.log(data);
         });
 
