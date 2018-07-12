@@ -5,7 +5,11 @@ let mongoose = require('mongoose');
 // define the schema for our user model
 let clientSchema = mongoose.Schema({
     id: Number, // Increase by one, starting from 0.
-    name: String,
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     created_at: {
         type: Date,
         default: Date.now(),

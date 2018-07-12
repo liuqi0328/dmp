@@ -9,37 +9,37 @@ let userSchema = mongoose.Schema({
         email        : String,
         password     : String,
         appId        : String,
-        appSecret    : String
+        appSecret    : String,
     },
     facebook         : {
         id           : String,
         token        : String,
         name         : String,
-        email        : String
+        email        : String,
     },
     twitter          : {
         id           : String,
         token        : String,
         displayName  : String,
-        username     : String
+        username     : String,
     },
     google           : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
     },
     amazon           : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
     },
     microsoft        : {
         id           : String,
         token        : String,
         email        : String,
-        name         : String
+        name         : String,
     },
     permissions      : [String],
     firstName        : String,

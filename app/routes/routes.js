@@ -1,29 +1,36 @@
+'use strict';
+
 const uuidv1 = require('uuid/v1');
 var User = require('../models/user');
 var Client = require('../models/client');
 var Invite = require('../models/invite');
 
+const voiceAppController = require('../controllers/voiceAppController');
+const profileController = require('../controllers/profileController');
+
 module.exports = function(app, passport) {
+    app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);
+
 // NORMAL ROUTES ===============================================================
 // show the home page (will also have our login links)
    app.get('/', function(req, res) {
-      
+
       // The code in comments is to manually add things to the DB's!!!
       // ----------------------
 
       Invite.find({}, (err, data) => {
-         if (err) 
+         if (err)
             console.log(err);
 
          console.log(data);
       });
 
-      // User.remove({}, function(err) { 
-      //    console.log('collection removed') 
+      // User.remove({}, function(err) {
+      //    console.log('collection removed')
       // });
 
       // User.find({}, (err, data) => {
-      //    if (err) 
+      //    if (err)
       //       console.log(err);
 
       //    console.log(data);
@@ -49,11 +56,7 @@ module.exports = function(app, passport) {
    });
 
    // PROFILE SECTION =========================
-   app.get('/profile', isLoggedIn, function(req, res) {
-      res.render('profile.ejs', {
-         user : req.user
-      });
-   });
+   app.get('/profile', isLoggedIn, profileController.getProfile);
 
    // LOGOUT ==============================
    app.get('/logout', function(req, res) {
@@ -83,7 +86,7 @@ module.exports = function(app, passport) {
             }), (req, res) => {
                console.log('req: ', req);
                // If this user is a FRSH admin...
-               if (req.user.permissions.indexOf('FRSH Admin') > -1) { 
+               if (req.user.permissions.indexOf('FRSH Admin') > -1) {
                   res.redirect('/profile/frsh');
                } else {
                   res.redirect('/profile');
@@ -142,7 +145,7 @@ module.exports = function(app, passport) {
             successRedirect : '/profile',
             failureRedirect : '/'
          }));
-       
+
    // =============================================================================
    // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
    // =============================================================================
@@ -200,7 +203,7 @@ module.exports = function(app, passport) {
    // =============================================================================
    // UNLINK ACCOUNTS =============================================================
    // =============================================================================
-   // Used to unlink accounts. 
+   // Used to unlink accounts.
    // For social accounts, just remove the token.
    // For local account, remove email and password.
    // User account will stay active in case they want to reconnect in the future
@@ -263,7 +266,7 @@ module.exports = function(app, passport) {
             // Clients page
                app.get('/profile/frsh/clients', isLoggedIn, function(req, res) {
                   Client.find({}, (err, data) => {
-                     if (err) 
+                     if (err)
                         console.log(err);
 
                      res.render('allClients.ejs', {
@@ -303,9 +306,9 @@ module.exports = function(app, passport) {
                               let nextId;
                               let currentTime = Date.now();
                               for (let i = 0; i < clients.length; i++) {
-                                 if (nextId == null || nextId <= clients[i].id) 
+                                 if (nextId == null || nextId <= clients[i].id)
                                     nextId = clients[i].id + 1;
-                                 
+
                                  else
                                     continue;
                               }
@@ -382,7 +385,7 @@ module.exports = function(app, passport) {
                      // Whe should now console.log a link to /invite?uuid={uuid}
                      // Print all data in invite model / can be deleted
                      Invite.find({}, (err, data) => {
-                        if (err) 
+                        if (err)
                            console.log(err);
 
                         console.log(data);
@@ -415,7 +418,7 @@ module.exports = function(app, passport) {
       app.get('/profile/profile-info', isLoggedIn, async function(req, res) {
          let currentUser = req.user;
          User.find({}, (err, data) => {
-            if (err) 
+            if (err)
                console.log(err);
 
             res.render('profile-info.ejs', {
@@ -425,7 +428,7 @@ module.exports = function(app, passport) {
          });
       })
 
-      // Options in profile info: 
+      // Options in profile info:
       // 1. Add user
       // 2. Delete user
       // 3. Edit user
@@ -468,13 +471,13 @@ module.exports = function(app, passport) {
                      throw err
                   data = result;
 
-                  res.render('edit-profile.ejs', { 
+                  res.render('edit-profile.ejs', {
                      message: 'That is not a valid client id.',
                      user: data
                   });
                });
             }
-            
+
             else {
                let updatedUser = new User({
                   firstname   : req.body.firstname,
@@ -527,7 +530,7 @@ module.exports = function(app, passport) {
          //    }
          // })
 
-         
+
       });
 
       // ----------- NOT USED AT THE MOMENT -------------
