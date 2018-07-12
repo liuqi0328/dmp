@@ -4,11 +4,18 @@ let mongoose = require('mongoose');
 
 // define the schema for our user model
 let clientSchema = mongoose.Schema({
-    id: Number, // Increase by one, starting from 0.
+    id: {
+        type: Number,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
         unique: true,
+    },
+    active: {
+        type: Boolean,
+        default: true,
     },
     created_at: {
         type: Date,
@@ -19,6 +26,13 @@ let clientSchema = mongoose.Schema({
         default: Date.now(),
     },
 });
+
+clientSchema.statics.getNextId = async () => {
+    let clients = await mongoose.model('client', clientSchema).find({});
+    if (clients.length < 1) return 1;
+    let ids = clients.map(x => x.id);
+    return Math.max(...ids) + 1;
+};
 
 // create the model for users and expose it to our app
 // clientSchema.plugin(autoIncrement.plugin, 'client');

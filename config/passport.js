@@ -98,7 +98,9 @@ module.exports = (passport) => {
                                     false,
                                     req.flash('signupMessage', 'That account name is already taken.'));
                     }
-                    Client.create({name: clientName}, (err, client) => {
+                    let nextId = await Client.getNextId();
+                    console.log('next id: ', nextId);
+                    Client.create({ id: nextId, name: clientName}, (err, client) => {
                         if (err) {
                             console.error(err);
                             return done(err);

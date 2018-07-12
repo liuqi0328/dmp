@@ -23,6 +23,7 @@ exports.authenticate = async (req, res, next) => {
     let client = await getApiKeyOwner(apiKey);
     console.log('authentication client: ', client);
 
+    if (!client.active) return res.sendStatus(401);
     res.locals.client = client;
     next();
 };

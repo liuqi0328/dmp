@@ -1,8 +1,14 @@
 {
-  "name": "node-authentication",
+  "name": "beyondvoice",
   "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "clean": "rm -rf node_modules",
+    "reinstall": "npm run clean && npm install"
+  },
   "dependencies": {
-    "bcrypt-nodejs": "latest",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "connect-flash": "~0.1.1",
     "cookie-parser": "~1.4.3",
@@ -21,5 +27,8 @@
     "request-promise": "^4.2.2",
     "uniqid": "^5.0.3",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.1"
   }
 }

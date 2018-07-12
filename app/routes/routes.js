@@ -286,9 +286,10 @@ module.exports = function(app, passport) {
                                     if (err)
                                     throw err;
 
-                                    return newClient;
-                                });
-                            });
+                                 return newClient;
+                              });
+                              console.log('newClient: ', newClient);
+                           });
                         }
                         });
 

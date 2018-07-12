@@ -18,6 +18,7 @@ let configDB = require('./config/database.js');
 let authHelper = require('./app/authorization/helper');
 
 // -------------- LINK TO MONGO DB -------------------
+mongoose.Promise = require('bluebird');
 mongoose.connect(configDB.url, {
     useMongoClient: true, // If bluebird not needed, delelete this!
 });
