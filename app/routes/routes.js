@@ -8,8 +8,17 @@ var Invite = require('../models/invite');
 const voiceAppController = require('../controllers/voiceAppController');
 const profileController = require('../controllers/profileController');
 const passportController = require('../controllers/passportController');
+const contentTagController = require('../controllers/cms/contentTagController');
 
 module.exports = function(app, passport) {
+    // CMS Routes
+    app.get('/cms', isLoggedIn, contentTagController.getAll);
+    app.post('/cms/new', isLoggedIn, contentTagController.create);
+    app.get('/cms/:contentTagId', isLoggedIn, contentTagController.getOne);
+    app.put('/cms/:contentTagId', isLoggedIn, contentTagController.update);
+    app.delete('/cms/:contentTagId', isLoggedIn, contentTagController.delete);
+
+    // Voice App Routes
     app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);
 
     // NORMAL ROUTES ===============================================================

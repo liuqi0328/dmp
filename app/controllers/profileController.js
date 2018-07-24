@@ -9,7 +9,7 @@ exports.getProfile = (req, res) => {
     });
 };
 
-exports.getProfileInfo = (req, res) => {
+exports.getProfileInfo = async (req, res) => {
     let currentUser = req.user;
     User.find({}, (err, data) => {
         if (err) {
@@ -22,6 +22,13 @@ exports.getProfileInfo = (req, res) => {
             data: data,
         });
     });
+
+    // let users = await User.find({});
+    // console.log('users: ', users);
+    // res.render('profile-info.ejs', {
+    //     user: currentUser,
+    //     data: users,
+    // });
 };
 
 exports.getDeleteProfile = async (req, res) => {
