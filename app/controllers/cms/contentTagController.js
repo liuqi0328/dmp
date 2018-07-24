@@ -100,5 +100,6 @@ exports.delete = async (req, res) => {
         console.log(err);
     }
 
+    // TODO: add flash message for errors
     res.redirect('/cms/content_tags');
 };
