@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Beyond Voice by FRSH</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-10 col-sm-offset-1">
+
+            <h1>
+                <span class="fa fa-sign-in"></span>Content Tags</h1>
+
+            <h4>Content Tags: </h4>
+
+            <a href="/cms/content_tags/new" class="btn btn-info">Add Content Tag</a>
+
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <table class='table table-hover table-bordered'>
+                <tr class='active'>
+                    <th class='col-md-3'>Name: </th>
+                    <th class='col-md-3'>Active Content: </th>
+                    <th class='col-md-2'>Created At: </th>
+                    <th class='col-md-2'>Last Updated: </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <% for (var i = 0; i < data.length; i++) { %>
+                    <tr>
+                        <td>
+                            <%= data[i].content_tag.name %>
+                        </td>
+                        <td>
+                            <%= data[i].activeContent %>
+                        </td>
+                        <td>
+                            <%= data[i].content_tag.created_at %>
+                        </td>
+                        <td>
+                            <%= data[i].content_tag.last_updated %>
+                        </td>
+                        <td>
+                            <form action="/cms/content_tags/<%=data[i].content_tag._id%>/update" method="get">
+                                <input type="submit" value="Edit Content Tag" class="btn btn-info" />
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/cms/content_tags/<%=data[i].content_tag._id%>/delete" method="get">
+                                <input type="submit" value="Delete Content Tag" class="btn btn-info" />
+                            </form>
+                        </td>
+                    </tr>
+                    <% } %>
+            </table>
+
+
+            <div class="text-center">
+                <p>
+                    <center>Fresh Digital Group Inc.</center>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

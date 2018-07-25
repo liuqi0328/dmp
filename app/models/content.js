@@ -3,7 +3,11 @@
 let mongoose = require('mongoose');
 
 let contentSchema = mongoose.Schema({
-    content_tag_id: {
+    name: {
+        type: String,
+        required: true,
+    },
+    client_id: {
         type: String,
         required: true,
     },
@@ -11,10 +15,6 @@ let contentSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-    },
-    active: {
-        type: Boolean,
-        default: true,
     },
     created_at: {
         type: Date,

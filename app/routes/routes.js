@@ -9,14 +9,26 @@ const voiceAppController = require('../controllers/voiceAppController');
 const profileController = require('../controllers/profileController');
 const passportController = require('../controllers/passportController');
 const contentTagController = require('../controllers/cms/contentTagController');
+const contentController = require('../controllers/cms/contentController');
 
 module.exports = function(app, passport) {
-    // CMS Routes
-    app.get('/cms', isLoggedIn, contentTagController.getAll);
-    app.post('/cms/new', isLoggedIn, contentTagController.create);
-    app.get('/cms/:contentTagId', isLoggedIn, contentTagController.getOne);
-    app.put('/cms/:contentTagId', isLoggedIn, contentTagController.update);
-    app.delete('/cms/:contentTagId', isLoggedIn, contentTagController.delete);
+    // CMS Routes ==============================================================
+
+    // CMS Content Tags Routes =================================================
+    app.get('/cms/content_tags', isLoggedIn, contentTagController.getAll);
+    app.get('/cms/content_tags/new', isLoggedIn, contentTagController.new);
+    app.post('/cms/content_tags/new', isLoggedIn, contentTagController.create);
+    app.get('/cms/content_tags/:contentTagId', isLoggedIn, contentTagController.getOne);
+    app.get('/cms/content_tags/:contentTagId/update', isLoggedIn, contentTagController.updatePage);
+    app.put('/cms/content_tags/:contentTagId/update', isLoggedIn, contentTagController.update);
+    app.get('/cms/content_tags/:contentTagId/delete', isLoggedIn, contentTagController.delete);
+
+    // CMS Contents Routes =====================================================
+    app.get('/cms/contents', isLoggedIn, contentController.getAll);
+    app.get('/cms/contents/new', isLoggedIn, contentController.new);
+    app.post('/cms/contents/new', isLoggedIn, contentController.create);
+    app.get('/cms/contents/:contentId/update', isLoggedIn, contentController.updatePage);
+    // app.put('/cms/contents/:contentId/update', isLoggedIn, contentController.update);
 
     // Voice App Routes
     app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);

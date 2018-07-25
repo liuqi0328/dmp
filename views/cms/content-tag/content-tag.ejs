@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Beyond Voice by FRSH</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-10 col-sm-offset-1">
+
+            <h1>
+                <span class="fa fa-sign-in"></span>Content Tag</h1>
+
+            <h4>Content Tags: </h4>
+
+            <a href="/cms/content_tags/new" class="btn btn-info">Add Content Tag</a>
+
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <table class='table table-hover table-bordered'>
+                <tr class='active'>
+                    <th class='col-md-3'>Name</th>
+                    <th class='col-md-2'>Created At</th>
+                    <th class='col-md-2'>Last Updated</th>
+                </tr>
+                <td>
+                    <%= content_tag.name %>
+                </td>
+                <td>
+                    <%= content_tag.created_at %>
+                </td>
+                <td>
+                    <%= content_tag.last_updated %>
+                </td>
+            </table>
+
+            <h4>Contents: </h4>
+
+            <table class='table table-hover table-bordered'>
+                <tr class='active'>
+                    <th class='col-md-3'>Name: </th>
+                    <th class='col-md-3'>Active Content: </th>
+                    <th class='col-md-2'>Created At: </th>
+                    <th class='col-md-2'>Last Updated: </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <% for (var i = 0; i < data.length; i++) { %>
+                    <tr>
+                        <td>
+                            <%= data[i].content_location %>
+                        </td>
+                        <td>
+                            <%= data[i].active %>
+                        </td>
+                        <td>
+                            <%= data[i].created_at %>
+                        </td>
+                        <td>
+                            <%= data[i].last_updated %>
+                        </td>
+                        <td>
+                            <form action="/cms/contents/<%=data[i]._id/updte%>" method="get">
+                                <input type="submit" value="Edit Content" class="btn btn-info" />
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/cms/contents/<%=data[i]._id/delete" method="get">
+                                <input type="submit" value="Delete Content" class="btn btn-info" />
+                            </form>
+                        </td>
+                    </tr>
+                    <% } %>
+            </table>
+
+
+            <div class="text-center">
+                <p>
+                    <center>Fresh Digital Group Inc.</center>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

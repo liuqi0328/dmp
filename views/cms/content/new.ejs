@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Beyond Voice by FRSH</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-10 col-sm-offset-1">
+
+            <h1>
+                <span class="fa fa-sign-in"></span>Content</h1>
+
+            <h4>Content:</h4>
+
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <form action="/cms/contents/new" method="post" enctype="multipart/form-data">
+                <label for="name">Enter name: </label>
+                <input type="text" class="form-control" name="name">
+                <label for="file">File: </label>
+                <input id="file" class="form-control" type="file" name="file">
+                <input type="submit" value="Save changes" class="btn btn-info" />
+            </form>
+
+            <div class="text-center">
+                <p>
+                    <center>Fresh Digital Group Inc.</center>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

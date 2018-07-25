@@ -11,6 +11,7 @@ let contentTagSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    contents: [{id: String, active: Boolean}],
     active: {
         type: Boolean,
         default: true,
