@@ -1,6 +1,6 @@
 'use strict';
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const ContentTag = require('../../models/contentTag');
 const Content = require('../../models/content');
 
@@ -31,7 +31,8 @@ exports.getAll = async (req, res) => {
     console.log('data: ', data);
 
     // TODO: add .ejs file for content index page
-    res.render('cms/content-tag/index', {data: data, message: req.flash('deleteMessage')});
+    res.render('cms/content-tag/index',
+               {data: data, message: req.flash('deleteMessage')});
 };
 
 exports.getOne = async (req, res) => {
@@ -48,7 +49,8 @@ exports.getOne = async (req, res) => {
     let contents = await Content.find({content_tag: contentTag._id});
 
     // TODO: add .ejs file for content info page
-    res.render('cms/content-tag/content-tag', {content_tag: contentTag, data: contents});
+    res.render('cms/content-tag/content-tag',
+               {content_tag: contentTag, data: contents});
 };
 
 exports.new = async (req, res) => {

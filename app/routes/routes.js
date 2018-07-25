@@ -1,9 +1,9 @@
 'use strict';
 
 const uuidv1 = require('uuid/v1');
-var User = require('../models/user');
-var Client = require('../models/client');
-var Invite = require('../models/invite');
+let User = require('../models/user');
+let Client = require('../models/client');
+let Invite = require('../models/invite');
 
 const voiceAppController = require('../controllers/voiceAppController');
 const profileController = require('../controllers/profileController');
@@ -18,25 +18,36 @@ module.exports = function(app, passport) {
     app.get('/cms/content_tags', isLoggedIn, contentTagController.getAll);
     app.get('/cms/content_tags/new', isLoggedIn, contentTagController.new);
     app.post('/cms/content_tags/new', isLoggedIn, contentTagController.create);
-    app.get('/cms/content_tags/:contentTagId', isLoggedIn, contentTagController.getOne);
-    app.get('/cms/content_tags/:contentTagId/update', isLoggedIn, contentTagController.updatePage);
-    app.put('/cms/content_tags/:contentTagId/update', isLoggedIn, contentTagController.update);
-    app.get('/cms/content_tags/:contentTagId/delete', isLoggedIn, contentTagController.delete);
+    app.get('/cms/content_tags/:contentTagId',
+            isLoggedIn,
+            contentTagController.getOne);
+    app.get('/cms/content_tags/:contentTagId/update',
+            isLoggedIn,
+            contentTagController.updatePage);
+    app.put('/cms/content_tags/:contentTagId/update',
+            isLoggedIn,
+            contentTagController.update);
+    app.get('/cms/content_tags/:contentTagId/delete',
+            isLoggedIn,
+            contentTagController.delete);
 
     // CMS Contents Routes =====================================================
     app.get('/cms/contents', isLoggedIn, contentController.getAll);
     app.get('/cms/contents/new', isLoggedIn, contentController.new);
     app.post('/cms/contents/new', isLoggedIn, contentController.create);
-    app.get('/cms/contents/:contentId/update', isLoggedIn, contentController.updatePage);
-    // app.put('/cms/contents/:contentId/update', isLoggedIn, contentController.update);
+    app.get('/cms/contents/:contentId/update',
+            isLoggedIn,
+            contentController.updatePage);
+    app.put('/cms/contents/:contentId/update',
+            isLoggedIn,
+            contentController.update);
 
     // Voice App Routes
     app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);
 
-    // NORMAL ROUTES ===============================================================
+    // NORMAL ROUTES ===========================================================
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
-
         // The code in comments is to manually add things to the DB's!!!
         // ----------------------
 
@@ -70,7 +81,7 @@ module.exports = function(app, passport) {
         // newClient.timeCreated = currentTime;
         // newClient.save();
 
-        //------------------------
+        // ------------------------
 
         res.render('index.ejs');
     });
@@ -83,9 +94,9 @@ module.exports = function(app, passport) {
 
     app.get('/console', passportController.getConsole);
 
-    // =============================================================================
-    // AUTHENTICATE (FIRST LOGIN) ==================================================
-    // =============================================================================
+    // =========================================================================
+    // AUTHENTICATE (FIRST LOGIN) ==============================================
+    // =========================================================================
 
     // locally --------------------------------
     // LOGIN ===============================
@@ -223,13 +234,16 @@ module.exports = function(app, passport) {
     // Used to unlink accounts.
     // For social accounts, just remove the token.
     // For local account, remove email and password.
-    // User account will stay active in case they want to reconnect in the future
+    // User account will stay active in case they want to reconnect in the
+    // future.
 
     // local -----------------------------------
     app.get('/unlink/local', isLoggedIn, passportController.getUnlinkLocal);
 
     // facebook -------------------------------
-    app.get('/unlink/facebook', isLoggedIn, passportController.getUnlinkFacebook);
+    app.get('/unlink/facebook',
+            isLoggedIn,
+            passportController.getUnlinkFacebook);
 
     // twitter --------------------------------
     app.get('/unlink/twitter', isLoggedIn, passportController.getUnlinkTwitter);
@@ -245,7 +259,7 @@ module.exports = function(app, passport) {
             // Profile page / home page
             app.get('/profile/frsh', isLoggedIn, function(req, res) {
             res.render('frsh-home.ejs', {
-                user : req.user
+                user: req.user,
             });
             });
 
@@ -460,8 +474,7 @@ module.exports = function(app, passport) {
 
 // route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
+    if (req.isAuthenticated()) return next();
 
     res.redirect('/');
 }
