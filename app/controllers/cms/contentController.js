@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO: ADD CATCH ERR PHRASE FOR AWAIT/ASYNC FUNCTIONS
+// TODO: LINK CORRECT EJS FILES FOR CONTROLLERS
 
 const formidable = require('formidable');
 const titleize = require('titleize');
