@@ -16,7 +16,6 @@ exports.getAll = async (req, res) => {
     });
 
     let data = [];
-
     for (let i = 0; i < contentTags.length; i++) {
         let contentTag = contentTags[i];
 
@@ -39,19 +38,17 @@ exports.getAll = async (req, res) => {
         data.push(entry);
     }
 
-    console.log('data: ', data);
-
     // TODO: add .ejs file for content index page
-    res.render('cms/content-tag/index',
-               {data: data, message: req.flash('deleteMessage')});
+    res.render('cms/content-tag/index', {
+        data: data,
+        message: req.flash('deleteMessage'),
+    });
 };
 
 exports.getOne = async (req, res) => {
     let user = req.user;
     let clientId = user.client_id;
     let contentTagId = req.params.contentTagId;
-
-    console.log(contentTagId);
 
     let contentTag = await ContentTag.findById(contentTagId);
     if (!contentTag) return res.sendStatus(404);
@@ -105,17 +102,12 @@ exports.new = async (req, res) => {
 exports.create = async (req, res) => {
     let user = req.user;
     let clientId = user.client_id;
+    let contentIds = req.body.content_ids || [];
+    let activeContentId = req.body.active_content;
 
     let params = {};
     params.name = req.body.name;
     params.client_id = clientId;
-
-    console.log('content tag create params: ', params);
-
-    // return res.sendStatus(200);
-
-    let contentIds = req.body.content_ids || [];
-    let activeContentId = req.body.active_content;
 
     let contents = [];
     for (let i = 0; i < contentIds.length; i++) {
@@ -129,12 +121,7 @@ exports.create = async (req, res) => {
         }
         contents.push(entry);
     }
-
     params.contents = contents;
-
-    console.log(params);
-
-    // return res.sendStatus(200);
 
     let existing;
     try {
