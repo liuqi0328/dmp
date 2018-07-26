@@ -22,9 +22,50 @@
 
             <h4>Content Tag information: </h4>
 
-            <form action="/cms/content_tags/new" method="post">
+            <% if (data) { %>
+                <form action="/cms/content_tags/<%=data._id%>/update" method="post">
+            <% } else { %>
+                <form action="/cms/content_tags/new" method="post">
+            <% } %>
                 <label>Name: </label>
-                <input type="text" class="form-control" name="name">
+                <% if (data) { %>
+                    <input type="text" class="form-control" name="name" value="<%= data.name%>">
+                <% } else { %>
+                    <input type="text" class="form-control" name="name">
+                <% } %>
+
+                <table class='table table-hover table-bordered'>
+                    <tr class='active'>
+                        <th></th>
+                        <th class='col-md-3'>Name: </th>
+                        <th class='col-md-3'>Location: </th>
+                        <th class='col-md-2'>Created At: </th>
+                        <th class='col-md-2'>Last Updated: </th>
+                        <th class='col-md-2'>Active: </th>
+                    </tr>
+                    <% for (let i = 0; i < contents.length; i++) { %>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="<%=contents[i]._id%>" name="content_ids" value="<%=contents[i]._id%>" />
+                            </td>
+                            <td>
+                                <%= contents[i].name %>
+                            </td>
+                            <td>
+                                <%= contents[i].content_location %>
+                            </td>
+                            <td>
+                                <%= contents[i].created_at %>
+                            </td>
+                            <td>
+                                <%= contents[i].last_updated %>
+                            </td>
+                            <td>
+                                <input type="checkbox" id="active" name="active_content" value="<%=contents[i]._id%>" />
+                            </td>
+                        </tr>
+                        <% } %>
+                </table>
                 <input type="submit" value="Save changes" class="btn btn-info" />
             </form>
 

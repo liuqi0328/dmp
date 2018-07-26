@@ -19,9 +19,9 @@
             <h1>
                 <span class="fa fa-sign-in"></span>Content Tag</h1>
 
-            <h4>Content Tags: </h4>
+            <a href="/cms/content_tags/<%=content_tag._id%>/update" class="btn btn-info">Update Content Tag</a>
 
-            <a href="/cms/content_tags/new" class="btn btn-info">Add Content Tag</a>
+            <div></br></div>
 
             <% if (message.length > 0) { %>
                 <div class="alert alert-danger">
@@ -50,20 +50,22 @@
 
             <table class='table table-hover table-bordered'>
                 <tr class='active'>
-                    <th class='col-md-3'>Name: </th>
-                    <th class='col-md-3'>Active Content: </th>
+                    <th class='col-md-2'>Name: </th>
+                    <th class='col-md-1'></th>
                     <th class='col-md-2'>Created At: </th>
                     <th class='col-md-2'>Last Updated: </th>
-                    <th></th>
-                    <th></th>
                 </tr>
-                <% for (var i = 0; i < data.length; i++) { %>
+                <% for (let i = 0; i < data.length; i++) { %>
                     <tr>
                         <td>
-                            <%= data[i].content_location %>
+                            <%= data[i].name %>
                         </td>
                         <td>
-                            <%= data[i].active %>
+                            <% if (data[i]._id == active_content_id) { %>
+                                <p>Active</p>
+                            <% } else { %>
+                                <p>False</p>
+                            <% } %>
                         </td>
                         <td>
                             <%= data[i].created_at %>
@@ -71,18 +73,8 @@
                         <td>
                             <%= data[i].last_updated %>
                         </td>
-                        <td>
-                            <form action="/cms/contents/<%=data[i]._id/updte%>" method="get">
-                                <input type="submit" value="Edit Content" class="btn btn-info" />
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/cms/contents/<%=data[i]._id/delete" method="get">
-                                <input type="submit" value="Delete Content" class="btn btn-info" />
-                            </form>
-                        </td>
                     </tr>
-                    <% } %>
+                <% } %>
             </table>
 
 

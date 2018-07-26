@@ -36,7 +36,6 @@
                     <th class='col-md-2'>Created At: </th>
                     <th class='col-md-2'>Last Updated: </th>
                     <th></th>
-                    <th></th>
                 </tr>
                 <% for (var i = 0; i < data.length; i++) { %>
                     <tr>
@@ -44,7 +43,7 @@
                             <%= data[i].content_tag.name %>
                         </td>
                         <td>
-                            <%= data[i].activeContent %>
+                            <%= data[i].active_content ?  data[i].active_content.name : '' %>
                         </td>
                         <td>
                             <%= data[i].content_tag.created_at %>
@@ -53,14 +52,15 @@
                             <%= data[i].content_tag.last_updated %>
                         </td>
                         <td>
-                            <form action="/cms/content_tags/<%=data[i].content_tag._id%>/update" method="get">
-                                <input type="submit" value="Edit Content Tag" class="btn btn-info" />
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/cms/content_tags/<%=data[i].content_tag._id%>/delete" method="get">
-                                <input type="submit" value="Delete Content Tag" class="btn btn-info" />
-                            </form>
+                            <a href="/cms/content_tags/<%=data[i].content_tag._id%>">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="/cms/content_tags/<%=data[i].content_tag._id%>/update">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="/cms/content_tags/<%=data[i].content_tag._id%>/delete">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
                         </td>
                     </tr>
                     <% } %>

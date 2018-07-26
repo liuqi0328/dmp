@@ -24,9 +24,9 @@ module.exports = function(app, passport) {
     app.get('/cms/content_tags/:contentTagId/update',
             isLoggedIn,
             contentTagController.updatePage);
-    app.put('/cms/content_tags/:contentTagId/update',
-            isLoggedIn,
-            contentTagController.update);
+    app.post('/cms/content_tags/:contentTagId/update',
+             isLoggedIn,
+             contentTagController.update);
     app.get('/cms/content_tags/:contentTagId/delete',
             isLoggedIn,
             contentTagController.delete);
