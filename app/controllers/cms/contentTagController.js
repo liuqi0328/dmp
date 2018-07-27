@@ -102,7 +102,10 @@ exports.new = async (req, res) => {
 exports.create = async (req, res) => {
     let user = req.user;
     let clientId = user.client_id;
+
     let contentIds = req.body.content_ids || [];
+    if (typeof contentIds == 'string') contentIds = [contentIds];
+
     let activeContentId = req.body.active_content;
 
     let params = {};
