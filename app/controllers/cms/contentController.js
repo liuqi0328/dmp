@@ -31,15 +31,48 @@ exports.getOne = async (req, res) => {
     if (!content) return res.sendStatus(404);
     if (content.client_id != clientId) return res.sendStatus(401);
 
+    let attachedTags = [];
+    try {
+        let contentTags = await ContentTag.find({client_id: clientId});
+        // attachedTags = contentTags.filter((tag) => {
+        //     let attachedContents = tag.contents;
+        //     for (let i = 0; i < attachedContents.length; i++) {
+        //         return attachedContents[i].id == content._id;
+        //     }
+        // })
+        contentTags.forEach((contentTag) => {
+            let attachedContents = contentTag.contents;
+            for (let i = 0; i < attachedContents.length; i++) {
+                if (attachedContents[i].id == content._id) {
+                    if (attachedContents[i].active == true) {
+                        contentTag.active_tag = true;
+                    }
+                    attachedTags.push(contentTag);
+                }
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+
+    console.log(attachedTags);
+
     // TODO: add .ejs file for content info page
-    res.render('cms/content/content', {data: content});
+    res.render('cms/content/content', {
+        data: content,
+        message: '',
+        content_tags: attachedTags,
+    });
 };
 
 exports.new = async (req, res) => {
     // let user = req.user;
     // let clientId = user.client_id;
 
-    res.render('cms/content/new', {message: req.flash('createContentErrMsg')});
+    res.render('cms/content/new', {
+        data: '',
+        message: req.flash('createContentErrMsg')
+    });
 };
 
 exports.create = async (req, res) => {
@@ -94,9 +127,9 @@ exports.updatePage = async (req, res) => {
 
     try {
         let content = await Content.findById(contentId);
-        if (content.client_id !== clientId) res.sendStatus(401);
+        if (content.client_id !== clientId) return res.sendStatus(401);
 
-        res.render('cms/content/update', { data: content });
+        res.render('cms/content/new', {data: content, message: ''});
     } catch (err) {
         console.log('update page get err...!');
         console.log(err);

@@ -23,9 +23,21 @@
                 </div>
             <% } %>
 
-            <form action="/cms/contents/new" enctype="multipart/form-data" method="post">
+            <% if (data) { %>
+                <form action="/cms/contents/<%=data._id%>/update" enctype="multipart/form-data" method="post">
+            <% } else { %>
+                <form action="/cms/contents/new" enctype="multipart/form-data" method="post">
+            <% } %>
                 <label for="name">Enter name: </label>
-                <input type="text" class="form-control" name="name">
+                <% if (data) { %>
+                    <input type="text" class="form-control" name="name" value="<%= data.name%>">
+                <% } else { %>
+                    <input type="text" class="form-control" name="name">
+                <% } %>
+                <% if (data) { %>
+                    <label for="location">Location: </label>
+                    <input type="text" class="form-control" name="name" value="<%= data.content_location%>" disabled>
+                <% } %>
                 <label for="file">File: </label>
                 <input id="file" class="form-control" type="file" name="file">
                 <input type="submit" value="Save changes" class="btn btn-info" />

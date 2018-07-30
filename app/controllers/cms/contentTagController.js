@@ -75,7 +75,7 @@ exports.getOne = async (req, res) => {
     // TODO: add .ejs file for content info page
     res.render('cms/content-tag/content-tag', {
         content_tag: contentTag,
-        active_content_id: activeContent.id,
+        active_content_id: activeContent ? activeContent.id : '',
         data: contents,
         message: '',
     });

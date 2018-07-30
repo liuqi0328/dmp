@@ -31,7 +31,6 @@
                     <th class='col-md-2'>Created At: </th>
                     <th class='col-md-2'>Last Updated: </th>
                     <th></th>
-                    <th></th>
                 </tr>
                 <% for (var i = 0; i < data.length; i++) { %>
                     <tr>
@@ -48,14 +47,15 @@
                             <%= data[i].last_updated %>
                         </td>
                         <td>
-                            <form action="/cms/contents/<%=data[i]._id%>/update" method="get">
-                                <input type="submit" value="Edit Content Tag" class="btn btn-info" />
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/cms/contents/<%=data[i]._id%>/delete" method="get">
-                                <input type="submit" value="Delete Content Tag" class="btn btn-info" />
-                            </form>
+                            <a href="/cms/contents/<%=data[i]._id%>">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="/cms/contents/<%=data[i]._id%>/update">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="/cms/contents/<%=data[i]._id%>/delet">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
                         </td>
                     </tr>
                 <% } %>

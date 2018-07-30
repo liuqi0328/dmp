@@ -14,8 +14,8 @@
     </header>
     <div class="container">
         <div class="col-sm-10 col-sm-offset-1">
-            <h1><span class="fa fa-sign-in"></span>Content Tag</h1>
-            <a href="/cms/content_tags/<%=content_tag._id%>/update" class="btn btn-info">Update Content Tag</a>
+            <h1><span class="fa fa-sign-in"></span>Content</h1>
+            <a href="/cms/contents/<%=data._id%>/update" class="btn btn-info">Update Content</a>
 
             <div></br></div>
 
@@ -28,46 +28,53 @@
             <table class='table table-hover table-bordered'>
                 <tr class='active'>
                     <th class='col-md-3'>Name</th>
+                    <th class='col-md-3'>Location</th>
                     <th class='col-md-2'>Created At</th>
                     <th class='col-md-2'>Last Updated</th>
                 </tr>
-                <td>
-                    <%= content_tag.name %>
-                </td>
-                <td>
-                    <%= content_tag.created_at %>
-                </td>
-                <td>
-                    <%= content_tag.last_updated %>
-                </td>
+                <tr>
+                    <td>
+                        <%= data.name %>
+                    </td>
+                    <td>
+                        <%= data.content_location %>
+                    </td>
+                    <td>
+                        <%= data.created_at %>
+                    </td>
+                    <td>
+                        <%= data.last_updated %>
+                    </td>
+                </tr>
             </table>
 
-            <h4>Contents: </h4>
+            <h4>Content Tags: </h4>
 
             <table class='table table-hover table-bordered'>
                 <tr class='active'>
                     <th class='col-md-2'>Name</th>
-                    <th class='col-md-1'>Active</th>
+                    <th class='col-md-2'>Active</th>
                     <th class='col-md-2'>Created At</th>
                     <th class='col-md-2'>Last Updated</th>
                 </tr>
-                <% for (let i = 0; i < data.length; i++) { %>
+                <% for (let i = 0; i < content_tags.length; i++) { %>
                     <tr>
                         <td>
-                            <%= data[i].name %>
+                            <%= content_tags[i].name %>
                         </td>
                         <td>
-                            <% if (data[i]._id == active_content_id) { %>
+                            <% if (content_tags[i].active_tag) { %>
                                 <p>Active</p>
                             <% } else { %>
-                                <p>False</p>
+                                <p>Not Active</p>
                             <% } %>
+
                         </td>
                         <td>
-                            <%= data[i].created_at %>
+                            <%= content_tags[i].created_at %>
                         </td>
                         <td>
-                            <%= data[i].last_updated %>
+                            <%= content_tags[i].last_updated %>
                         </td>
                     </tr>
                 <% } %>
