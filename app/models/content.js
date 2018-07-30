@@ -16,6 +16,15 @@ let contentSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
+    type: {
+        type: String,
+        required: true,
+        enum: ['audio', 'video', 'image'],
+    },
+    isrc: {
+        audio: String,
+        video: String,
+    },
     created_at: {
         type: Date,
         default: Date.now(),

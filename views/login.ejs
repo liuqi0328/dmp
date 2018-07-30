@@ -5,59 +5,66 @@
     <title>Beyond Voice by FRSH</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
-    <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <link rel="stylesheet" type="text/css" href="src/css/login.css">
-    <style>
-        body {
-            padding-top: 80px;
-        }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+    <header>
+        <% include ./partials/navbar %>
+    </header>
     <div class="container">
         <div class="col-sm-6 col-sm-offset-3">
 
+            <h1>
+                <span class="fa fa-sign-in"></span> Login</h1>
 
-            <!--  <h1>  <span class="fa fa-sign-in"></span>   Welcome to the Data Manger PlatFrom for Fresh Digtal </h1> -->
-            <h1 style="font-size:250%; color:white ; font-family:Helvetica "> Welcome to the Data Managerss PlatFrom for Fresh Digtal </h1>
+            <body>
+                <div class="container">
+                    <div class="col-sm-6 col-sm-offset-3">
 
-            <% if (message.length > 0) { %>
-                <div class="alert alert-danger">
-                    <%= message %>
-                </div>
-                <% } %>
 
-                    <!-- LOGIN FORM -->
-                    <div class="loginbox ">
-                        <h1>Data Manager Platform</h1>
+                        <!--  <h1>  <span class="fa fa-sign-in"></span>   Welcome to the Data Manger PlatFrom for Fresh Digtal </h1> -->
+                        <h1 style="font-size:250%; color:white ; font-family:Helvetica "> Welcome to the Data Managerss PlatFrom for Fresh Digtal </h1>
 
-                        <form action="/login" method="post">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="text" class="form-control" name="email" placeholder="Enter your Email ">
+                        <% if (message.length > 0) { %>
+                            <div class="alert alert-danger">
+                                <%= message %>
                             </div>
-                            <br />
-                            <label>Password</label>
-                            <input type="password" class="form-control" name="password" placeholder="Enter your password ">
-                            <input type="submit" class="btn btn-warning btn-lg" name="name" value="Login" />
-                        </form>
-                        <a href="/signup">Create New Account &nbsp &nbsp &nbsp &nbsp </a>
-                        <a href="/">Go to Home Page</a>
+                            <% } %>
 
-                        <div class="text-center">
-                            <p>
-                                <br />
-                                <center>Fresh Digital Group Inc.</center>
-                            </p>
-                        </div>
+                                <!-- LOGIN FORM -->
+                                <div class="loginbox ">
+                                    <h1>Data Manager Platform</h1>
+
+                                    <form action="/login" method="post">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="text" class="form-control" name="email" placeholder="Enter your Email ">
+                                        </div>
+                                        <br />
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" name="password" placeholder="Enter your password ">
+                                        <input type="submit" class="btn btn-warning btn-lg" name="name" value="Login" />
+                                    </form>
+                                    <a href="/signup">Create New Account &nbsp &nbsp &nbsp &nbsp </a>
+                                    <a href="/">Go to Home Page</a>
+
+                                    <div class="text-center">
+                                        <p>
+                                            <br />
+                                            <center>Fresh Digital Group Inc.</center>
+                                        </p>
+                                    </div>
+                                </div>
                     </div>
+                </div>
+
         </div>
     </div>
-</body>
+    <footer>
+        <% include ./partials/footer %>
+    </footer>
+    <% include ./partials/scripts %>
+        </body>
 
 </html>

@@ -6,15 +6,13 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <style>
-        body {
-            padding-top: 80px;
-            word-wrap: break-word;
-        }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+    <header>
+        <% include ./partials/navbar %>
+    </header>
     <div class="container">
 
         <div class="page-header text-center">
@@ -53,189 +51,292 @@
                             <a href="/connect/local" class="btn btn-default">Connect Local</a>
                             <% } %>
 
-                </div>
-            </div>
+                                <body>
+                                    <div class="container">
 
-            <!-- FACEBOOK INFORMATION -->
-            <div class="col-sm-6">
-                <div class="well">
-                    <h3 class="text-primary">
-                        <span class="fa fa-facebook"></span> Facebook</h3>
+                                        <div class="page-header text-center">
+                                            <h1>
+                                                <span class="fa fa-anchor"></span> Profile Page</h1>
+                                            <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+                                            <a href="/profile/profile-info" class="btn btn-default">Profile info</a>
+                                            <a href="/profile/client-info" class="btn btn-default">Client info</a>
+                                        </div>
 
-                    <!-- check if the user has this token (is the user authenticated with this social account) -->
-                    <% if (user.facebook.token) { %>
-                        <p>
-                            <strong>id</strong>:
-                            <%= user.facebook.id %>
-                                <br>
-                                <strong>token</strong>:
-                                <%= user.facebook.token %>
-                                    <br>
-                                    <strong>email</strong>:
-                                    <%= user.facebook.email %>
-                                        <br>
-                                        <strong>name</strong>:
-                                        <%= user.facebook.name %>
-                                            <br>
-                        </p>
+                                        <div class="row">
+                                            <!-- LOCAL INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3>
+                                                        <span class="fa fa-user"></span> Local</h3>
 
-                        <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
-                            <% } %>
+                                                    <% if (user.local.email) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user._id %>
+                                                                <br>
+                                                                <strong>email</strong>:
+                                                                <%= user.local.email %>
+                                                                    <br>
+                                                                    <strong>password</strong>:
+                                                                    <%= user.local.password %>
+                                                                        <br>
+                                                                        <strong>permissions</strong>:
+                                                                        <%= user.permissions %>
+                                                        </p>
 
-                </div>
-            </div>
-        </div>
-        <div class="row">
+                                                        <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                                                        <a href="profile/update/local" class="btn btn-default">Update account</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/local" class="btn btn-default">Connect Local</a>
+                                                            <% } %>
 
-            <!-- TWITTER INFORMATION -->
-            <div class="col-sm-6">
-                <div class="well">
-                    <h3 class="text-info">
-                        <span class="fa fa-twitter"></span> Twitter</h3>
+                                                </div>
+                                            </div>
 
-                    <% if (user.twitter.token) { %>
-                        <p>
-                            <strong>id</strong>:
-                            <%= user.twitter.id %>
-                                <br>
-                                <strong>token</strong>:
-                                <%= user.twitter.token %>
-                                    <br>
-                                    <strong>display name</strong>:
-                                    <%= user.twitter.displayName %>
-                                        <br>
-                                        <strong>username</strong>:
-                                        <%= user.twitter.username %>
-                        </p>
+                                            <!-- FACEBOOK INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3 class="text-primary">
+                                                        <span class="fa fa-facebook"></span> Facebook</h3>
 
-                        <a href="/unlink/twitter" class="btn btn-info">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/twitter" class="btn btn-info">Connect Twitter</a>
-                            <% } %>
+                                                    <!-- check if the user has this token (is the user authenticated with this social account) -->
+                                                    <% if (user.facebook.token) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user.facebook.id %>
+                                                                <br>
+                                                                <strong>token</strong>:
+                                                                <%= user.facebook.token %>
+                                                                    <br>
+                                                                    <strong>email</strong>:
+                                                                    <%= user.facebook.email %>
+                                                                        <br>
+                                                                        <strong>name</strong>:
+                                                                        <%= user.facebook.name %>
+                                                                            <br>
+                                                        </p>
 
-                </div>
-            </div>
+                                                        <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
+                                                            <% } %>
 
-            <!-- GOOGLE INFORMATION -->
-            <div class="col-sm-6">
-                <div class="well">
-                    <h3 class="text-danger">
-                        <span class="fa fa-google-plus"></span> Google+</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
 
-                    <% if (user.google.token) { %>
-                        <p>
-                            <strong>id</strong>:
-                            <%= user.google.id %>
-                                <br>
-                                <strong>token</strong>:
-                                <%= user.google.token %>
-                                    <br>
-                                    <strong>email</strong>:
-                                    <%= user.google.email %>
-                                        <br>
-                                        <strong>name</strong>:
-                                        <%= user.google.name %>
-                        </p>
+                                            <!-- TWITTER INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3 class="text-info">
+                                                        <span class="fa fa-twitter"></span> Twitter</h3>
 
-                        <a href="/unlink/google" class="btn btn-danger">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/google" class="btn btn-danger">Connect Google</a>
-                            <% } %>
+                                                    <% if (user.twitter.token) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user.twitter.id %>
+                                                                <br>
+                                                                <strong>token</strong>:
+                                                                <%= user.twitter.token %>
+                                                                    <br>
+                                                                    <strong>display name</strong>:
+                                                                    <%= user.twitter.displayName %>
+                                                                        <br>
+                                                                        <strong>username</strong>:
+                                                                        <%= user.twitter.username %>
+                                                        </p>
 
-                </div>
-            </div>
+                                                        <a href="/unlink/twitter" class="btn btn-info">Unlink</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/twitter" class="btn btn-info">Connect Twitter</a>
+                                                            <% } %>
 
-            <!-- AMAZON INFORMATION -->
-            <div class="col-sm-6">
-                <div class="well">
-                    <h3 class="text-primary">
-                        <span class="fa fa-amazon"></span> Amazon</h3>
+                                                </div>
+                                            </div>
 
-                    <% if (user.amazon.token) { %>
-                        <p>
-                            <strong>id</strong>:
-                            <%= user.amazon.id %>
-                                <br>
-                                <strong>token</strong>:
-                                <%= user.amazon.token %>
-                                    <br>
-                                    <strong>email</strong>:
-                                    <%= user.amazon.email %>
-                                        <br>
-                                        <strong>name</strong>:
-                                        <%= user.amazon.name %>
-                        </p>
+                                            <!-- GOOGLE INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3 class="text-danger">
+                                                        <span class="fa fa-google-plus"></span> Google+</h3>
 
-                        <a href="/unlink/amazon" class="btn btn-primary">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/amazon" class="btn btn-primary">Connect Amazon</a>
-                            <% } %>
+                                                    <% if (user.google.token) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user.google.id %>
+                                                                <br>
+                                                                <strong>token</strong>:
+                                                                <%= user.google.token %>
+                                                                    <br>
+                                                                    <strong>email</strong>:
+                                                                    <%= user.google.email %>
+                                                                        <br>
+                                                                        <strong>name</strong>:
+                                                                        <%= user.google.name %>
+                                                        </p>
 
-                </div>
-            </div>
+                                                        <a href="/unlink/google" class="btn btn-danger">Unlink</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/google" class="btn btn-danger">Connect Google</a>
+                                                            <% } %>
 
-            <!-- MICROSOFT INFORMATION -->
-            <div class="col-sm-6">
-                <div class="well">
-                    <h3 class="text-primary">
-                        <span class="fa fa-windows"></span> Microsoft</h3>
+                                                </div>
+                                            </div>
 
-                    <% if (user.microsoft.token) { %>
-                        <p>
-                            <strong>id</strong>:
-                            <%= user.microsoft.id %>
-                                <br>
-                                <strong>token</strong>:
-                                <%= user.microsoft.token %>
-                                    <br>
-                                    <strong>email</strong>:
-                                    <%= user.microsoft.email %>
-                                        <br>
-                                        <strong>name</strong>:
-                                        <%= user.microsoft.name %>
-                        </p>
+                                            <!-- AMAZON INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3 class="text-primary">
+                                                        <span class="fa fa-amazon"></span> Amazon</h3>
 
-                        <a href="/unlink/microsoft" class="btn btn-primary">Unlink</a>
-                        <% } else { %>
-                            <a href="/connect/microsoft" class="btn btn-primary">Connect Microsoft</a>
-                            <% } %>
+                                                    <% if (user.amazon.token) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user.amazon.id %>
+                                                                <br>
+                                                                <strong>token</strong>:
+                                                                <%= user.amazon.token %>
+                                                                    <br>
+                                                                    <strong>email</strong>:
+                                                                    <%= user.amazon.email %>
+                                                                        <br>
+                                                                        <strong>name</strong>:
+                                                                        <%= user.amazon.name %>
+                                                        </p>
 
-                </div>
-            </div>
+                                                        <a href="/unlink/amazon" class="btn btn-primary">Unlink</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/amazon" class="btn btn-primary">Connect Amazon</a>
+                                                            <% } %>
 
-        </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-        <center>
-            <p>Messages in the last 10 seconds: </p>
-            <div class="text-center" id="recCounter">
-            </div>
-        </center>
-        <div class="text-center">
-            <p>
-                <center>Fresh Digital Group Inc.</center>
-            </p>
-        </div>
+                                        <!-- AMAZON INFORMATION -->
+                                        <div class="col-sm-6">
+                                            <div class="well">
+                                                <h3 class="text-primary">
+                                                    <span class="fa fa-amazon"></span> Amazon</h3>
 
-    </div>
-</body>
+                                                <% if (user.amazon.token) { %>
+                                                    <p>
+                                                        <strong>id</strong>:
+                                                        <%= user.amazon.id %>
+                                                            <br>
+                                                            <strong>token</strong>:
+                                                            <%= user.amazon.token %>
+                                                                <br>
+                                                                <strong>email</strong>:
+                                                                <%= user.amazon.email %>
+                                                                    <br>
+                                                                    <strong>name</strong>:
+                                                                    <%= user.amazon.name %>
+                                                    </p>
 
-<script>
-    (function worker() {
-        $.ajax({
-            url: 'http://localhost:8000/dmp/reporting/realtime',
-            'content-type': 'application/json',
-            'method': "GET",
-            success: function (data) {
-                $('#recCounter').html(data.result);
-            },
-            complete: function () {
-                // Schedule the next request when the current one's complete
-                setTimeout(worker, 10000);
-            }
-        });
-    })();
-</script>
+                                                    <a href="/unlink/amazon" class="btn btn-primary">Unlink</a>
+                                                    <% } else { %>
+                                                        <a href="/connect/amazon" class="btn btn-primary">Connect Amazon</a>
+                                                        <% } %>
+
+                                                            <!-- MICROSOFT INFORMATION -->
+                                                            <div class="col-sm-6">
+                                                                <div class="well">
+                                                                    <h3 class="text-primary">
+                                                                        <span class="fa fa-windows"></span> Microsoft</h3>
+
+                                                                    <% if (user.microsoft.token) { %>
+                                                                        <p>
+                                                                            <strong>id</strong>:
+                                                                            <%= user.microsoft.id %>
+                                                                                <br>
+                                                                                <strong>token</strong>:
+                                                                                <%= user.microsoft.token %>
+                                                                                    <br>
+                                                                                    <strong>email</strong>:
+                                                                                    <%= user.microsoft.email %>
+                                                                                        <br>
+                                                                                        <strong>name</strong>:
+                                                                                        <%= user.microsoft.name %>
+                                                                        </p>
+
+                                                                        <a href="/unlink/microsoft" class="btn btn-primary">Unlink</a>
+                                                                        <% } else { %>
+                                                                            <a href="/connect/microsoft" class="btn btn-primary">Connect Microsoft</a>
+                                                                            <% } %>
+
+                                                                </div>
+                                                            </div>
+
+                                            </div>
+
+                                            <!-- MICROSOFT INFORMATION -->
+                                            <div class="col-sm-6">
+                                                <div class="well">
+                                                    <h3 class="text-primary">
+                                                        <span class="fa fa-windows"></span> Microsoft</h3>
+
+                                                    <% if (user.microsoft.token) { %>
+                                                        <p>
+                                                            <strong>id</strong>:
+                                                            <%= user.microsoft.id %>
+                                                                <br>
+                                                                <strong>token</strong>:
+                                                                <%= user.microsoft.token %>
+                                                                    <br>
+                                                                    <strong>email</strong>:
+                                                                    <%= user.microsoft.email %>
+                                                                        <br>
+                                                                        <strong>name</strong>:
+                                                                        <%= user.microsoft.name %>
+                                                        </p>
+
+                                                        <a href="/unlink/microsoft" class="btn btn-primary">Unlink</a>
+                                                        <% } else { %>
+                                                            <a href="/connect/microsoft" class="btn btn-primary">Connect Microsoft</a>
+                                                            <% } %>
+
+                                                                <center>
+                                                                    <p>Messages in the last 10 seconds: </p>
+                                                                    <div class="text-center" id="recCounter">
+                                                                    </div>
+                                                                </center>
+                                                                <div class="text-center">
+                                                                    <p>
+                                                                        <center>Fresh Digital Group Inc.</center>
+                                                                    </p>
+                                                                </div>
+
+                                                </div>
+
+                                                <center>
+                                                    <p>Messages in the last 10 seconds: </p>
+                                                    <div class="text-center" id="recCounter">
+                                                    </div>
+                                                </center>
+                                            </div>
+                                            <footer>
+                                                <% include ./partials/footer %>
+                                            </footer>
+                                            <% include ./partials/scripts %>
+                                </body>
+
+                                <script>
+                                    (function worker() {
+                                        $.ajax({
+                                            url: 'http://localhost:8000/dmp/reporting/realtime',
+                                            'content-type': 'application/json',
+                                            'method': "GET",
+                                            success: function (data) {
+                                                $('#recCounter').html(data.result);
+                                            },
+                                            complete: function () {
+                                                // Schedule the next request when the current one's complete
+                                                setTimeout(worker, 10000);
+                                            }
+                                        });
+                                    })();
+                                </script>
 
 </html>

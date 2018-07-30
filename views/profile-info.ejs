@@ -4,11 +4,12 @@
     <title>Beyond Voice by FRSH</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body                { padding-top:80px; }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<header>
+    <% include ./partials/navbar %>
+</header>
 <div class="container">
 <div class="col-sm-10 col-sm-offset-1">
     <h1><span class="fa fa-sign-in"></span> Profile info</h1>
@@ -54,7 +55,7 @@
                     <td><%= data[i].local.email %></td>
                     <td><%= data[i].role %></td>
                     <td><%= data[i].ownerId %></td>
-                    <td> 
+                    <td>
                         <form action="/profile/edit-profile" method="get">
                             <input type='hidden' class='form-control' name='userId' value='<%= data[i]._id %>'>
                             <input type="submit" value="Edit user" class="btn btn-info"/>
@@ -69,12 +70,11 @@
             <% } %>
         <% } %>
     </table>
-
-    <div class="text-center">
-        <p><center>Fresh Digital Group Inc.</center></p>
-    </div>
-
 </div>
 </div>
+<footer>
+    <% include ./partials/footer %>
+</footer>
+<% include ./partials/scripts %>
 </body>
 </html>
