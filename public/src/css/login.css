@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+body {
+    margin: 0;
+    padding: 0;
+    background: url(../image/Fresh.jpg) no-repeat center center fixed;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+div.ex1 {
+    margin-top: 25px;
+}
+
+.loginbox {
+    width: 320px;
+    height: 420px;
+    background: rgba(0, 0, 0, 0.664);
+    padding: 70px 30px;
+    color: white;
+    margin: 0 auto;
+    margin-top: 0px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+}
+
+.cordova {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: calc(50%-50px);
+    margin: 0 auto;
+}
+
+h1 {
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.loginbox p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.loginbox input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.loginbox input[type="text"],
+input[type="password"] {
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.loginbox input[type="text"]:focus {
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.loginbox input[type="password"]:focus {
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.loginbox a {
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 20px;
+    color: white;
+}
+
+.loginbox a:hover {
+    color: #ffc107;
+}
+
+input[type=submit],
+input[type=reset] {
+    background-color: #800000;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
