@@ -1,6 +1,7 @@
 'use strict';
 
 // TODO: LINK CORRECT EJS FILES FOR CONTROLLERS
+// TODO: UPDATE DIFFERENT FLASH MESSAGES
 
 const formidable = require('formidable');
 const titleize = require('titleize');

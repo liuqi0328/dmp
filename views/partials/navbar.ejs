@@ -1,0 +1,38 @@
+<!-- views/partials/navbar.ejs -->
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                BeyondVoice
+            </a>
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/profile">Profile</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">CMS
+                    <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/cms/content_tags">Content Tags</a>
+                        </li>
+                        <li>
+                            <a href="/cms/contents">Contents</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" >
+                <li>
+                    <a href="/logout">Log Out</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>

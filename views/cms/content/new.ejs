@@ -5,20 +5,16 @@
     <title>Beyond Voice by FRSH</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body {
-            padding-top: 80px;
-        }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+    <header>
+        <% include ../../partials/navbar %>
+    </header>
     <div class="container">
         <div class="col-sm-10 col-sm-offset-1">
-
-            <h1>
-                <span class="fa fa-sign-in"></span>Content</h1>
-
+            <h1><span class="fa fa-sign-in"></span>Content</h1>
             <h4>Content:</h4>
 
             <% if (message.length > 0) { %>
@@ -34,15 +30,12 @@
                 <input id="file" class="form-control" type="file" name="file">
                 <input type="submit" value="Save changes" class="btn btn-info" />
             </form>
-
-            <div class="text-center">
-                <p>
-                    <center>Fresh Digital Group Inc.</center>
-                </p>
-            </div>
-
         </div>
     </div>
+    <footer>
+        <% include ../../partials/footer %>
+    </footer>
+    <% include ../../partials/scripts %>
 </body>
 
 </html>

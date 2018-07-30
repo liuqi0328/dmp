@@ -4,9 +4,7 @@
     <title>Beyond Voice by FRSH</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body         { padding-top:80px; }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container">
@@ -24,11 +22,10 @@
         <a href="/auth/amazon" class="btn btn-primary"><span class="fa fa-amazon"></span> Amazon</a>
         <a href="/auth/microsoft" class="btn btn-primary"><span class="fa fa-windows"></span> Microsoft</a>
     </div>
-
-    <div class="text-center">
-         <p><center>Fresh Digital Group Inc.</center></p>
-    </div>
-
 </div>
+<footer>
+    <% include ./partials/footer %>
+</footer>
+<% include ./partials/scripts %>
 </body>
 </html>

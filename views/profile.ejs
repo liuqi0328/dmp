@@ -5,11 +5,12 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <style>
-        body         { padding-top:80px; word-wrap:break-word; }
-    </style>
+    <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<header>
+    <% include ./partials/navbar %>
+</header>
 <div class="container">
 
     <div class="page-header text-center">
@@ -32,7 +33,7 @@
                         <strong>password</strong>: <%= user.local.password %><br>
                         <strong>permissions</strong>: <%= user.permissions %>
                     </p>
-                    
+
                     <a href="/unlink/local" class="btn btn-default">Unlink</a>
                     <a href="profile/update/local" class="btn btn-default">Update account</a>
                 <% } else { %>
@@ -107,7 +108,7 @@
 
             </div>
         </div>
-        
+
         <!-- AMAZON INFORMATION -->
         <div class="col-sm-6">
             <div class="well">
@@ -128,7 +129,7 @@
 
             </div>
         </div>
-        
+
         <!-- MICROSOFT INFORMATION -->
         <div class="col-sm-6">
             <div class="well">
@@ -149,7 +150,7 @@
 
             </div>
         </div>
-        
+
     </div>
 
     <center>
@@ -157,13 +158,13 @@
         <div class="text-center" id="recCounter">
         </div>
     </center>
-    <div class="text-center">
-        <p><center>Fresh Digital Group Inc.</center></p>
-    </div>
-
 </div>
+<footer>
+    <% include ./partials/footer %>
+</footer>
+<% include ./partials/scripts %>
 </body>
-    
+
 <script>
     (function worker() {
   $.ajax({
@@ -178,7 +179,7 @@
       setTimeout(worker, 10000);
     }
   });
-})();    
+})();
 </script>
-    
+
 </html>

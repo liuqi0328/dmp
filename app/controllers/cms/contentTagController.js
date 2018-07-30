@@ -1,6 +1,7 @@
 'use strict';
 
 // TODO: ADD CATCH ERR PHRASE FOR AWAIT/ASYNC FUNCTIONS
+// TODO: UPDATE DIFFERENT FLASH MESSAGES
 
 // const mongoose = require('mongoose');
 const ContentTag = require('../../models/contentTag');
@@ -180,7 +181,7 @@ exports.updatePage = async (req, res) => {
         data: contentTag,
         contents: contents || [],
         selected_contents: existingContents,
-        active_content_id: activeContent.id,
+        active_content_id: activeContent ? activeContent.id : '',
     });
 };
 
