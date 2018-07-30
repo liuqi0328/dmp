@@ -6,6 +6,7 @@ body {
     background-size: cover;
     background-position: center;
     font-family: 'Helvetica Neue', sans-serif;
+    padding-top: 50px;
 }
 
 div.ex1 {
