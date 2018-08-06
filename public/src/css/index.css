@@ -11,8 +11,8 @@ body {
 }
 
 .loginbox {
-    width: 320px;
-    height: 420px;
+    width: 480px;
+    height: 320px;
     background: rgba(0, 0, 0, 0.664);
     padding: 10px 30px;
     color: white;
@@ -22,6 +22,12 @@ body {
     left: 50%;
     position: absolute;
     box-sizing: border-box;
+}
+
+.btn-xl {
+    width: 170px;
+    height: 50px;
+    font-size: 20px;
 }
 
 .loginbox input[type="text"],

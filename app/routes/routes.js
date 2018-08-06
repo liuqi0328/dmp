@@ -11,7 +11,7 @@ const passportController = require('../controllers/passportController');
 const contentTagController = require('../controllers/cms/contentTagController');
 const contentController = require('../controllers/cms/contentController');
 
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
     // CMS Routes ==============================================================
 
     // CMS Content Tags Routes =================================================
@@ -19,38 +19,38 @@ module.exports = function(app, passport) {
     app.get('/cms/content_tags/new', isLoggedIn, contentTagController.new);
     app.post('/cms/content_tags/new', isLoggedIn, contentTagController.create);
     app.get('/cms/content_tags/:contentTagId',
-            isLoggedIn,
-            contentTagController.getOne);
+        isLoggedIn,
+        contentTagController.getOne);
     app.get('/cms/content_tags/:contentTagId/update',
-            isLoggedIn,
-            contentTagController.updatePage);
+        isLoggedIn,
+        contentTagController.updatePage);
     app.post('/cms/content_tags/:contentTagId/update',
-             isLoggedIn,
-             contentTagController.update);
+        isLoggedIn,
+        contentTagController.update);
     app.get('/cms/content_tags/:contentTagId/delete',
-            isLoggedIn,
-            contentTagController.delete);
+        isLoggedIn,
+        contentTagController.delete);
 
     // CMS Contents Routes =====================================================
     app.get('/cms/contents', isLoggedIn, contentController.getAll);
     app.get('/cms/contents/:contentId',
-            isLoggedIn,
-            contentController.getOne);
+        isLoggedIn,
+        contentController.getOne);
     app.get('/cms/contents/new', isLoggedIn, contentController.new);
     app.post('/cms/contents/new', isLoggedIn, contentController.create);
     app.get('/cms/contents/:contentId/update',
-            isLoggedIn,
-            contentController.updatePage);
+        isLoggedIn,
+        contentController.updatePage);
     app.put('/cms/contents/:contentId/update',
-            isLoggedIn,
-            contentController.update);
+        isLoggedIn,
+        contentController.update);
 
     // Voice App Routes
     app.get('/voiceapps', isLoggedIn, voiceAppController.getAllAlexaSkills);
 
     // NORMAL ROUTES ===========================================================
     // show the home page (will also have our login links)
-    app.get('/', function(req, res) {
+    app.get('/', function (req, res) {
         // The code in comments is to manually add things to the DB's!!!
         // ----------------------
 
@@ -245,8 +245,8 @@ module.exports = function(app, passport) {
 
     // facebook -------------------------------
     app.get('/unlink/facebook',
-            isLoggedIn,
-            passportController.getUnlinkFacebook);
+        isLoggedIn,
+        passportController.getUnlinkFacebook);
 
     // twitter --------------------------------
     app.get('/unlink/twitter', isLoggedIn, passportController.getUnlinkTwitter);
@@ -258,221 +258,233 @@ module.exports = function(app, passport) {
     app.get('/unlink/amazon', isLoggedIn, passportController.getUnlinkAmazon);
 
     // =============== TESTING ====================
-        // Login FRSH Users
-            // Profile page / home page
-            app.get('/profile/frsh', isLoggedIn, function(req, res) {
-            res.render('frsh-home.ejs', {
-                user: req.user,
-            });
-            });
+    // Login FRSH Users
+    // Profile page / home page
+    app.get('/profile/frsh', isLoggedIn, function (req, res) {
+        res.render('frsh-home.ejs', {
+            user: req.user,
+        });
+    });
 
-            // Clients page
-                app.get('/profile/frsh/clients', isLoggedIn, function(req, res) {
-                    Client.find({}, (err, data) => {
+    // Clients page
+    app.get('/profile/frsh/clients', isLoggedIn, function (req, res) {
+        Client.find({}, (err, data) => {
+            if (err)
+                console.log(err);
+
+            res.render('allClients.ejs', {
+                data: data
+            });
+        });
+    });
+
+    // Delete client
+    app.get('/profile/delete-client', isLoggedIn, function (req, res) {
+        let clientId = req.query.clientId; // Account to delete
+
+        Client.findOne({
+            _id: clientId
+        }).remove().exec();
+        res.redirect('/profile/frsh/clients');
+    });
+
+    // Add client
+    app.get('/profile/frsh/clients/add-client', isLoggedIn, function (req, res) {
+        res.render('add-client.ejs');
+    });
+
+    app.post('/profile/frsh/clients/add-client', isLoggedIn, function (req, res) {
+        Client.findOne({
+            'name': req.body.clientName
+        }, function (err, client) {
+            if (err)
+                throw err;
+
+            if (client)
+                return req.flash('addClientMessage', 'That client already exists.');
+            //this flash is probably not working. You're not printing it.
+
+            else {
+                Client.find(function (err, result) {
+                    var clients = JSON.parse(JSON.stringify(result));
+                    if (err)
+                        throw err;
+
+                    let nextId;
+                    let currentTime = Date.now();
+                    for (let i = 0; i < clients.length; i++) {
+                        if (nextId == null || nextId <= clients[i].id)
+                            nextId = clients[i].id + 1;
+
+                        else
+                            continue;
+                    }
+
+                    var newClient = new Client();
+                    newClient.id = nextId;
+                    newClient.name = req.body.clientName;
+                    newClient.timeCreated = currentTime;
+                    newClient.save(function (err) {
                         if (err)
-                        console.log(err);
+                            throw err;
 
-                        res.render('allClients.ejs', {
-                        data : data
-                        });
+                        return newClient;
                     });
+                    console.log('newClient: ', newClient);
                 });
+            }
+        });
 
-                // Delete client
-                    app.get('/profile/delete-client', isLoggedIn, function(req, res) {
-                        let clientId = req.query.clientId; // Account to delete
+        res.redirect('/profile/frsh/clients');
+    })
 
-                        Client.findOne({_id: clientId}).remove().exec();
-                        res.redirect('/profile/frsh/clients');
-                    });
+    // Client users
+    app.get('/profile/frsh/clients/users', isLoggedIn, function (req, res) {
+        let clientId = req.query.clientId;
 
-                // Add client
-                    app.get('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
-                        res.render('add-client.ejs');
-                    });
+        User.find({
+            ownerId: clientId
+        }, (err, data) => {
+            if (err)
+                console.log(err);
 
-                    app.post('/profile/frsh/clients/add-client', isLoggedIn, function(req, res) {
-                        Client.findOne({ 'name' : req.body.clientName }, function(err, client) {
-                        if (err)
-                            throw err;
+            res.render('client-users.ejs', {
+                users: data
+            });
+        });
+    });
 
-                        if (client)
-                            return req.flash('addClientMessage', 'That client already exists.');
-                            //this flash is probably not working. You're not printing it.
+    // Invite new user
+    app.get('/profile/frsh/clients/users/invite-user', isLoggedIn, function (req, res) {
+        res.render('invite-user.ejs', {
+            inviterId: req.user._id
+        });
+    });
 
-                        else {
-                            Client.find(function(err, result) {
-                                var clients = JSON.parse(JSON.stringify(result));
-                                if (err)
-                                    throw err;
+    app.post('/profile/frsh/clients/users/invite-user', isLoggedIn, function (req, res) {
+        Invite.findOne({
+            'email': req.body.userEmail
+        }, function (err, invite) {
+            if (err)
+                throw err;
 
-                                let nextId;
-                                let currentTime = Date.now();
-                                for (let i = 0; i < clients.length; i++) {
-                                    if (nextId == null || nextId <= clients[i].id)
-                                    nextId = clients[i].id + 1;
+            if (invite)
+                return req.flash('inviteUserMessage', 'That user is already invited.');
 
-                                    else
-                                    continue;
-                                }
+            else {
+                var currentTime = Date.now();
 
-                                var newClient = new Client();
-                                newClient.id = nextId;
-                                newClient.name = req.body.clientName;
-                                newClient.timeCreated = currentTime;
-                                newClient.save(function(err) {
-                                    if (err)
-                                    throw err;
+                var newInvite = new Invite();
+                newInvite.email = req.body.userEmail;
+                newInvite.permissions.push(req.body.userPermissions);
+                newInvite.clientId = req.body.clientId;
+                newInvite.uuid = uuidv1();
+                newInvite.timeCreated = currentTime;
+                newInvite.inviterId = req.body.inviterId;
 
-                                 return newClient;
-                              });
-                              console.log('newClient: ', newClient);
-                           });
-                        }
-                        });
+                newInvite.save(function (err) {
+                    if (err)
+                        throw err;
 
-                        res.redirect('/profile/frsh/clients');
-                    })
+                    return newInvite;
+                });
+            }
 
-                // Client users
-                    app.get('/profile/frsh/clients/users', isLoggedIn, function(req, res) {
-                        let clientId = req.query.clientId;
+            res.redirect('/profile/frsh/clients/users');
+        });
 
-                        User.find({ownerId:clientId}, (err, data) => {
-                        if (err)
-                            console.log(err);
+        // We can invite a new user. The information above is saved in that table.
+        // Whe should now console.log a link to /invite?uuid={uuid}
+        // Print all data in invite model / can be deleted
+        Invite.find({}, (err, data) => {
+            if (err)
+                console.log(err);
 
-                        res.render('client-users.ejs', {
-                            users : data
-                        });
-                        });
-                    });
+            console.log(data);
+        });
+        // --------------------------
+    });
 
-                    // Invite new user
-                    app.get('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
-                        res.render('invite-user.ejs', {
-                        inviterId : req.user._id
-                        });
-                    });
+    // Access to all users (for a specific client)
+    // User settings
+    // Delete user
+    // Add user
+    // Edit user settings
 
-                    app.post('/profile/frsh/clients/users/invite-user', isLoggedIn, function(req, res) {
-                        Invite.findOne({ 'email' : req.body.userEmail }, function(err, invite) {
-                        if (err)
-                            throw err;
+    // Login client-user (admin)
+    // User settings
+    // Invite new user
+    // Delete user
 
-                        if (invite)
-                            return req.flash('inviteUserMessage', 'That user is already invited.');
-
-                        else {
-                            var currentTime = Date.now();
-
-                            var newInvite = new Invite();
-                            newInvite.email = req.body.userEmail;
-                            newInvite.permissions.push(req.body.userPermissions);
-                            newInvite.clientId = req.body.clientId;
-                            newInvite.uuid = uuidv1();
-                            newInvite.timeCreated = currentTime;
-                            newInvite.inviterId = req.body.inviterId;
-
-                            newInvite.save(function(err) {
-                                if (err)
-                                    throw err;
-
-                                return newInvite;
-                            });
-                        }
-
-                        res.redirect('/profile/frsh/clients/users');
-                        });
-
-                        // We can invite a new user. The information above is saved in that table.
-                        // Whe should now console.log a link to /invite?uuid={uuid}
-                        // Print all data in invite model / can be deleted
-                        Invite.find({}, (err, data) => {
-                        if (err)
-                            console.log(err);
-
-                        console.log(data);
-                        });
-                        // --------------------------
-                    });
-
-            // Access to all users (for a specific client)
-                // User settings
-                    // Delete user
-                    // Add user
-                    // Edit user settings
-
-        // Login client-user (admin)
-            // User settings
-            // Invite new user
-            // Delete user
-
-        // Login client-user (user)
-            // Edit user settings
-            // Delete user
+    // Login client-user (user)
+    // Edit user settings
+    // Delete user
 
 
-        // In profile are 2 options:
-        // 1. Profile info: show all users + their client-/company-number
-        // 2. Client info: show all clients/companies. When you click on a company
+    // In profile are 2 options:
+    // 1. Profile info: show all users + their client-/company-number
+    // 2. Client info: show all clients/companies. When you click on a company
 
-        // -------------- PROFILE SECTION -------------------
-        // Start page:
-        app.get('/profile/profile-info',
-                isLoggedIn,
-                profileController.getProfileInfo);
+    // -------------- PROFILE SECTION -------------------
+    // Start page:
+    app.get('/profile/profile-info',
+        isLoggedIn,
+        profileController.getProfileInfo);
 
-        // Options in profile info:
-        // 1. Add user
-        // 2. Delete user
-        // 3. Edit user
+    // Options in profile info:
+    // 1. Add user
+    // 2. Delete user
+    // 3. Edit user
 
-        // app.get('/profile/add-profile', isLoggedIn, function(req, res) {
-        //    res.render('add-profile.ejs');
-        // });
+    // app.get('/profile/add-profile', isLoggedIn, function(req, res) {
+    //    res.render('add-profile.ejs');
+    // });
 
-        app.get('/profile/delete-profile',
-                isLoggedIn,
-                profileController.getDeleteProfile);
+    app.get('/profile/delete-profile',
+        isLoggedIn,
+        profileController.getDeleteProfile);
 
-        // Edit profile settings (email and permissions can be changed)
-        app.get('/profile/edit-profile',
-                isLoggedIn,
-                profileController.getEditProfile);
+    // Edit profile settings (email and permissions can be changed)
+    app.get('/profile/edit-profile',
+        isLoggedIn,
+        profileController.getEditProfile);
 
-        app.post('/profile/edit-profile',
-                 isLoggedIn,
-                 profileController.postEditProfile);
+    app.post('/profile/edit-profile',
+        isLoggedIn,
+        profileController.postEditProfile);
 
-        // ----------- NOT USED AT THE MOMENT -------------
-        // Update local account
-        app.get('/profile/update/local', isLoggedIn, async function(req, res) {
-            res.render('update-user.ejs', {
+    // ----------- NOT USED AT THE MOMENT -------------
+    // Update local account
+    app.get('/profile/update/local', isLoggedIn, async function (req, res) {
+        res.render('update-user.ejs', {
             message: req.flash('localUpdateMessage'),
             user: req.user,
-            });
         });
+    });
 
-        app.post('/profile/update/local', function(req, res) {
-            console.log('req body: ', req.body);
-            let userId = req.session.passport.user;
+    app.post('/profile/update/local', function (req, res) {
+        console.log('req body: ', req.body);
+        let userId = req.session.passport.user;
 
-            let local = {};
-            local.email = req.body.email;
-            local.password = req.body.password;
+        let local = {};
+        local.email = req.body.email;
+        local.password = req.body.password;
 
-            // query that finds the id that needs to be updated.
-            let query = {_id: userId};
+        // query that finds the id that needs to be updated.
+        let query = {
+            _id: userId
+        };
 
-            User.update(query, {local: local}, function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.redirect('/profile');
-                }
-            });
+        User.update(query, {
+            local: local
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/profile');
+            }
         });
+    });
 };
 
 // route middleware to ensure user is logged in

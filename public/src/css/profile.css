@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 body {
+    padding-top: 50px;
     margin: 0;
     padding: 0;
     background: url(../image/Fresh.jpg) no-repeat center center fixed;
@@ -8,17 +9,17 @@ body {
     font-family: 'Helvetica Neue', sans-serif;
     padding-top: 10%;
     padding-left: 10%;
+    color: white;
 }
 
 .loginbox {
-    width: 320px;
-    height: 420px;
+    width: 700px;
+    height: 500px;
     background: rgba(0, 0, 0, 0.664);
     padding: 10px 30px;
-    color: white;
     transform: translate(-50%, -50%);
     margin-top: 250px;
-    top: 50%;
+    top: 20%;
     left: 50%;
     position: absolute;
     box-sizing: border-box;

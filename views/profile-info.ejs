@@ -1,80 +1,102 @@
 <!doctype html>
 <html>
+
 <head>
-    <title>Beyond Voice by FRSH</title>
+    <title>Beyond Voice by FRSHdd</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link href="/src/css/style.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-<header>
-    <% include ./partials/navbar %>
-</header>
-<div class="container">
-<div class="col-sm-10 col-sm-offset-1">
-    <h1><span class="fa fa-sign-in"></span> Profile info</h1>
+    <header>
+        <% include ./partials/navbar %>
+    </header>
+    <div class="container">
+        <div class="col-sm-10 col-sm-offset-1">
+            <h1>
+                <span class="fa fa-sign-in"></span> Profile info</h1>
 
-    <a href="/profile" class="btn btn-info">Back to profile</a>
-    <!-- ------------- YOUR ACCOUNT ------------- -->
-    <h4>Your account: </h4>
-    <table class='table table-hover table-bordered'>
-        <tr class='active'>
-            <th class='col-md-3'>First name: </th>
-            <th class='col-md-3'>Last name: </th>
-            <th class='col-md-3'>Email: </th>
-            <th class='col-md-3'>Permissions: </th>
-        </tr>
-        <tr>
-            <td><%= user.firstName %></td>
-            <td><%= user.lastName %></td>
-            <td><%= user.local.email %></td>
-            <td><%= user.role %></td>
-        </tr>
-    </table>
-
-    <!-- ------------- ALL ACCOUNTS ------------- -->
-    <h4>All accounts: </h4>
-
-    <table class='table table-hover table-bordered'>
-        <tr class='active'>
-            <th class='col-md-3'>First name: </th>
-            <th class='col-md-3'>Last name: </th>
-            <th class='col-md-2'>Email: </th>
-            <th class='col-md-2'>Permissions: </th>
-            <th class='col-md-2'>Client ID: </th>
-            <th></th>
-            <th></th>
-        </tr>
-        <% for (var i = 0; i < data.length; i++) { %>
-            <% if (data[i].local.email == user.local.email) { %>
-                <% continue; %>
-            <% } else { %>
+            <a href="/profile" class="btn btn-info">Back to profile</a>
+            <!-- ------------- YOUR ACCOUNT ------------- -->
+            <h4>Your account: </h4>
+            <table class='table table-hover table-bordered'>
+                <tr class='active'>
+                    <th class='col-md-3'>First name: </th>
+                    <th class='col-md-3'>Last name: </th>
+                    <th class='col-md-3'>Email: </th>
+                    <th class='col-md-3'>Permissions: </th>
+                </tr>
                 <tr>
-                    <td><%= data[i].firstName %></td>
-                    <td><%= data[i].lastName %></td>
-                    <td><%= data[i].local.email %></td>
-                    <td><%= data[i].role %></td>
-                    <td><%= data[i].ownerId %></td>
                     <td>
-                        <form action="/profile/edit-profile" method="get">
-                            <input type='hidden' class='form-control' name='userId' value='<%= data[i]._id %>'>
-                            <input type="submit" value="Edit user" class="btn btn-info"/>
-                        </form>
+                        <%= user.firstName %>
                     </td>
                     <td>
-                        <form action="/profile/delete-profile" method="get">
-                            <input type="submit" value="Delete user" class="btn btn-info"/>
-                        </form>
+                        <%= user.lastName %>
                     </td>
-              </tr>
-            <% } %>
-        <% } %>
-    </table>
-</div>
-</div>
-<footer>
-    <% include ./partials/footer %>
-</footer>
-<% include ./partials/scripts %>
+                    <td>
+                        <%= user.local.email %>
+                    </td>
+                    <td>
+                        <%= user.role %>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- ------------- ALL ACCOUNTS ------------- -->
+            <h4>All accounts: </h4>
+
+            <table class='table table-hover table-bordered'>
+                <tr class='active'>
+                    <th class='col-md-3'>First name: </th>
+                    <th class='col-md-3'>Last name: </th>
+                    <th class='col-md-2'>Email: </th>
+                    <th class='col-md-2'>Permissions: </th>
+                    <th class='col-md-2'>Client ID: </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <% for (var i = 0; i < data.length; i++) { %>
+                    <% if (data[i].local.email == user.local.email) { %>
+                        <% continue; %>
+                            <% } else { %>
+                                <tr>
+                                    <td>
+                                        <%= data[i].firstName %>
+                                    </td>
+                                    <td>
+                                        <%= data[i].lastName %>
+                                    </td>
+                                    <td>
+                                        <%= data[i].local.email %>
+                                    </td>
+                                    <td>
+                                        <%= data[i].role %>
+                                    </td>
+                                    <td>
+                                        <%= data[i].ownerId %>
+                                    </td>
+                                    <td>
+                                        <form action="/profile/edit-profile" method="get">
+                                            <input type='hidden' class='form-control' name='userId' value='<%= data[i]._id %>'>
+                                            <input type="submit" value="Edit user" class="btn btn-info" />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/profile/delete-profile" method="get">
+                                            <input type="submit" value="Delete user" class="btn btn-info" />
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% } %>
+                                    <% } %>
+            </table>
+        </div>
+    </div>
+    <footer>
+        <% include ./partials/footer %>
+    </footer>
+    <% include ./partials/scripts %>
 </body>
+
 </html>
