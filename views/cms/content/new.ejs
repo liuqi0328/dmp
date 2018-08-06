@@ -24,7 +24,7 @@
             <% } %>
 
             <% if (data) { %>
-                <form action="/cms/contents/<%=data._id%>/update" enctype="multipart/form-data" method="post">
+                <form action="/cms/contents/<%=data._id%>/update" enctype="multipart/form-data" method="put">
             <% } else { %>
                 <form action="/cms/contents/new" enctype="multipart/form-data" method="post">
             <% } %>

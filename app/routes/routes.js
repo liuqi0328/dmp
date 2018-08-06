@@ -32,12 +32,12 @@ module.exports = function(app, passport) {
             contentTagController.delete);
 
     // CMS Contents Routes =====================================================
+    app.get('/cms/contents/new', isLoggedIn, contentController.newPage);
+    app.post('/cms/contents/new', isLoggedIn, contentController.create);
     app.get('/cms/contents', isLoggedIn, contentController.getAll);
     app.get('/cms/contents/:contentId',
             isLoggedIn,
             contentController.getOne);
-    app.get('/cms/contents/new', isLoggedIn, contentController.new);
-    app.post('/cms/contents/new', isLoggedIn, contentController.create);
     app.get('/cms/contents/:contentId/update',
             isLoggedIn,
             contentController.updatePage);

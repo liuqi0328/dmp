@@ -65,13 +65,15 @@ exports.getOne = async (req, res) => {
     });
 };
 
-exports.new = async (req, res) => {
+exports.newPage = async (req, res) => {
     // let user = req.user;
     // let clientId = user.client_id;
 
+    console.log('content new....');
+
     res.render('cms/content/new', {
         data: '',
-        message: req.flash('createContentErrMsg')
+        message: req.flash('createContentErrMsg'),
     });
 };
 
