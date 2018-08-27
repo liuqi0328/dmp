@@ -25,3 +25,4 @@ If you would like to download the code and try it for yourself:
 - [Twitter](http://scotch.io/tutorials/easy-node-authentication-twitter)
 - [Google](http://scotch.io/tutorials/easy-node-authentication-google)
 - [Linking All Accounts Together](http://scotch.io/tutorials/easy-node-authentication-linking-all-accounts-together)
+- [Use EJS to template your node application](https://scotch.io/tutorials/use-ejs-to-template-your-node-application)
